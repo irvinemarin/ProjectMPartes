@@ -19,7 +19,9 @@
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                   <mat-label class="label_pj">{{form.labelPassword}}</mat-label>
-                  <input matInput class="input_pj" [placeholder]="form.hintPassword" [(ngModel)]="form.valuePassword">
+                  <input matInput class="input_pj"
+                         type="password"
+                         [placeholder]="form.hintPassword" [(ngModel)]="form.valuePassword">
                 </mat-form-field>
               </div>
 

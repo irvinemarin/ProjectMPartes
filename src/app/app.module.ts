@@ -52,7 +52,7 @@ import {LoginComponent} from './login/login.component';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 
 const routes: Routes = [
-  {path: '', component: MainComponent},
+  {path: '', component: LoginComponent},
   {path: 'login', component: LoginComponent},
   {path: 'aboutAs', component: AboutComponent},
   {path: 'contact', component: ContactoComponent},

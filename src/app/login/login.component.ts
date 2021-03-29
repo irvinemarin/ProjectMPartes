@@ -131,13 +131,18 @@ export class LoginComponent implements OnInit {
 
 
         this.api.getUserData(result.user.uid)
-          .subscribe((result) => {
-              alert('bienvenido ' + result['nombres']);
+          .subscribe(result => {
+              result.forEach(item => {
+                console.table('asdadf : ' + item);
+                alert('bienvenido ' + item.nombres);
 
-              // if (result) {
-              //   alert('Usuario NO Registrado');
-              // } else {
-              // }
+                // if (result) {
+                //   alert('Usuario NO Registrado');
+                // } else {
+                // }
+              });
+
+
             }
             , error => {
               alert('ERROR');
