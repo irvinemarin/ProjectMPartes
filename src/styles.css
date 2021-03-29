@@ -1,0 +1,149 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --primary-color_dev: #82bcb9;
+  --primary-color_text: #ffffff;
+  --primary-color_footer: #646464;
+}
+
+.primary_color_dev {
+  background-color: var(--primary-color_dev);
+  color: var(--primary-color_text);
+}
+
+.primary_color_footer {
+  background-color: var(--primary-color_footer);
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+
+}
+
+.btn_readmore {
+  position: absolute !important;
+  right: 15px !important;
+  bottom: 15px !important;
+}
+
+
+mat-grid-tile-footer {
+  background: white;
+}
+
+
+H2 {
+  font-size: 25px !important;
+  padding: 5px !important;
+  margin-bottom: 0 !important;
+  margin-top: 30px !important;
+}
+
+.h2_border {
+  border-bottom-color: brown;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  height: 4px !important;
+  width: 50px !important;
+  z-index: 1119999;
+  margin-bottom: 20px;
+}
+
+
+mat-card {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tituloCard {
+  position: absolute;
+  top: 30%;
+  color: white;
+  text-transform: uppercase;
+  width: 100%;
+  margin-right: 16px !important;
+}
+
+mat-card:hover {
+  box-shadow: -1px 5px 16px -3px rgba(0, 0, 0, 1);
+  -webkit-box-shadow: -1px 5px 16px -3px rgba(0, 0, 0, 1);
+  -moz-box-shadow: -1px 5px 16px -3px rgba(0, 0, 0, 1);
+}
+
+.card_content {
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-bottom: 16px;
+}
+
+.fecha_card {
+  background-color: dodgerblue;
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.imgCard {
+  height: 40% !important;
+  width: 100% !important;
+}
+
+.imgCard2 {
+  height: 40% !important;
+  width: 100% !important;
+}
+
+mat-grid-tile {
+  position: absolute;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+
+.footer-primary-color {
+  background-color: #673ab7 !important;
+}
+
+.example-tooltip-background {
+  background: #00be41 !important;
+}
+
+.example-tooltip-red {
+  background: #d40000 !important;
+}
+
+::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(13deg, #b54444 14%, #730000 64%);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(13deg, #b54444 14%, #730000 64%);
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: inset 7px 10px 12px #f0f0f0;
+}

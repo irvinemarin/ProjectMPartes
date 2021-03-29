@@ -1,0 +1,16 @@
+mat-list {
+  color: black !important;
+}
+
+mat-list-item::after {
+  background-color: white;
+}
+
+mat-list-item:hover {
+  background-color: #cacaca;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  color: white;
+
+}
+

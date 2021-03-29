@@ -1,0 +1,102 @@
+<div class="container-fluid">
+
+  <div class="row fill-parent">
+    <div class="col-md-10 col-sm-12 offset-md-1">
+      <mat-card class="card-login">
+        <div class="row">
+
+          <div class="example-card col-md-5 col-sm-12 cols-login p-5">
+            <mat-card-content class="">
+              <img src="./assets/logo-pj.png" height="50px">
+              <br>
+              <br>
+              <p style="font-size: 25px;text-align: center !important;width: 100%!important;">INICIO DE
+                SESION</p>
+              <div class="p-3">
+                <mat-form-field class="example-full-width">
+                  <mat-label class="label_pj">{{form.labelUsername}}</mat-label>
+                  <input matInput class="input_pj" [placeholder]="form.hintUsername" [(ngModel)]="form.valueUsername">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <mat-label class="label_pj">{{form.labelPassword}}</mat-label>
+                  <input matInput class="input_pj" [placeholder]="form.hintPassword" [(ngModel)]="form.valuePassword">
+                </mat-form-field>
+              </div>
+
+              <div class="row">
+                <div class=" col-sm-6 col-md-6">
+                  <div class="row">
+                    <div class="col-sm-9">
+                      <p class="label_pj">CODIGO</p>
+                      <canvas class="canvas_content" id="divCanvas" #canvas
+                              style="
+                              background-image: url('/assets/icon_canvas.png');
+                              background-repeat: repeat;">
+                      </canvas>
+                    </div>
+                    <button mat-mini-fab color="warn" class="btn_reloadCode"
+                            (click)="reloadCode()"
+                            aria-label="Example icon button with a filter list icon">
+                      <mat-icon>refresh</mat-icon>
+                    </button>
+
+
+                  </div>
+
+                </div>
+
+                <div class="col-sm-6 col-md-6">
+                  <br>
+                  <br>
+                  <mat-form-field style="width: 100%!important;">
+                    <mat-label class="label_pj">{{form.labelCode}}</mat-label>
+                    <input matInput
+                           style="text-transform: uppercase;
+                           "
+                           [placeholder]="form.hintCode"
+                           [(ngModel)]="form.valueCode">
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+
+            </mat-card-content>
+            <mat-card-actions>
+
+              <a mat-flat-button href="/singup" target="_blank">Registrase</a>
+              <button mat-raised-button color="primary"
+                      class="col-12"
+                      [disabled]="form.disableBtnIngresar"
+                      (click)="onIngresarClicked()">INGRESAR
+              </button>
+              <br>
+              <br>
+              <h4 CLASS="align-content-center">o ingresar por ...</h4>
+              <button mat-raised-button color="" class="col-12"
+                      (click)="onClickAuthGoogle()">GOOGLE
+                <img src="https://img-authors.flaticon.com/google.jpg" alt="" HEIGHT="25">
+              </button>
+            </mat-card-actions>
+
+
+          </div>
+          <div class="col-md-7 col-sm-12 sm-hide">
+            <img src="./assets/Palacio_solo.jpg"
+                 style="width: 100%!important;height: 100%!important;max-height: 100%!important;background-position: center center;
+  background-repeat: no-repeat;"
+                 alt="">
+          </div>
+
+
+        </div>
+
+
+      </mat-card>
+
+    </div>
+
+
+  </div>
+</div>
+<app-footer></app-footer>

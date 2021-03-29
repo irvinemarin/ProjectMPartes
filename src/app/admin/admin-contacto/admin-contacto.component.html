@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 ">
+      <h2>Datos Contacto</h2>
+      <mat-list role="list">
+
+        <mat-list-item role="listitem">Direccion :
+
+          <span
+            style="position: absolute;top: 35px;  color: #8861b7">
+            {{dataContancto["direccion"]}}
+          </span>
+          <button mat-icon-button style="position: absolute;right: 8px" (click)="editData('DIR')">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+        </mat-list-item>
+        <br>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem">Telefono :
+
+          <span
+            style="position: absolute;top: 35px;  color: #8861b7">
+            {{dataContancto["telefono"]}}
+          </span>
+          <button mat-icon-button style="position: absolute;right: 8px" (click)="editData('TEL')">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-list-item>
+        <br>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem">Email :
+          <span
+            style="position: absolute;top: 35px;  color: #8861b7">
+            {{dataContancto["email"]}}
+          </span>
+          <button mat-icon-button style="position: absolute;right: 8px" (click)="editData('EMA')">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-list-item>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+
+      </mat-list>
+
+    </div>
+    <div class="col-md-8 ">
+      <h2>Mensages Recibidos</h2>
+      <div>
+        <mat-card *ngFor="let item of listMessage;let row = index" class="mb-1 p-3">
+          <mat-card-content class="p-2">
+            <div>
+
+              <h4>
+                Correo Origen: <br><span style="color: #673ab7"> {{item['correo']}} </span>
+
+              </h4>
+              <h4>
+                Nombres Apellidos: <br><span
+                style="color: #673ab7"> {{item['nombres'] + " " + item['apellidos']}} </span>
+
+              </h4>
+              <p>Mensaje <br><span style="color: #673ab7"> {{item['msj']}} </span></p>
+
+            </div>
+
+            <a href="mailto:marinc.irvin@gmail.com?Subject=Interesado%20en%20el%20curso">Contactar por correo</a>
+
+
+
+            <!--            <button mat-icon-button style="position: absolute;right: 8px">-->
+            <!--              <mat-icon>edit</mat-icon>-->
+            <!--            </button>-->
+
+          </mat-card-content>
+        </mat-card>
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

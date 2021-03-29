@@ -1,0 +1,57 @@
+
+.fill-parent {
+  width: 100% !important;
+}
+
+.card-login {
+  height: auto !important;
+  margin: 5% !important;
+}
+
+.cols-login {
+  height: 100% !important;
+}
+
+.example-full-width {
+  width: 100%;
+  margin-bottom: 1px !important;
+  /*background-color: #c63434;*/
+
+}
+
+/*.label_pj {*/
+/*  color: white;*/
+/*}*/
+
+.input_pj {
+  height: 100% !important;
+}
+
+.canvas_content {
+  border-radius: 5px;
+  border: 1px solid red;
+  height: 60px;
+  width: 100px;
+}
+
+.content_divcanvas::before {
+  /*background-image: url('/src/assets/icon.png');*/
+  /*background-repeat: repeat;*/
+}
+
+@media (max-width: 767px) {
+  .sm-hide {
+    display: none;
+  }
+}
+
+@media (max-width: 574px) {
+  .col-xs-12 {
+    width: 100% !important;
+  }
+}
+
+.btn_reloadCode {
+  top: 40px !important;
+  left: 0px;
+}

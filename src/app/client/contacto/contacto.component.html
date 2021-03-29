@@ -1,0 +1,136 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="container">
+  <br>
+  <div class="row">
+    <button mat-button #back matSuffix mat-icon-button style="float: left; left: 16px!important;" class="col-sm-2"
+            [routerLink]="''">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 style="padding-left: 50px!important;" class="col-sm-10">
+      {{contactoData.titulo}}
+      <div class="h2_border"></div>
+    </h2>
+  </div>
+
+
+  <mat-card class="msj-box" style="margin: 26px auto !important; width: 80%!important; padding: 48px !important;">
+
+    <mat-card-content>
+      <mat-card-title>
+      </mat-card-title>
+      <mat-card-content>
+        <div>
+          <mat-card-subtitle>
+
+          </mat-card-subtitle>
+
+          <div class="row">
+            <div class="col-sm-5">
+              <iframe
+                class="col-sm-12"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7581.353098163875!2d-77.03624123367126!3d-12.060589191757284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8db1e539667%3A0x4f45538aa07bda29!2sCercado%20de%20Lima!5e0!3m2!1ses!2spe!4v1614645684242!5m2!1ses!2spe"
+                height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+
+              <mat-list role="list">
+
+                <mat-list-item role="listitem">Direccion :
+
+                  <span
+                    style="position: absolute;right: 8px; top: 35px;  color: #c1c1c1"> {{dataContancto["direccion"]}}
+                  </span>
+                </mat-list-item>
+                <br>
+
+                <mat-list-item role="listitem">Telefono :
+
+                  <span
+                    style="position: absolute;right: 8px; top: 35px;  color: #c1c1c1"> {{dataContancto["telefono"]}}
+                  </span>
+
+                </mat-list-item>
+                <mat-list-item role="listitem">Email :
+                  <span
+                    style="position: absolute;right: 8px; top: 35px;  color: #c1c1c1"> {{dataContancto["email"]}}
+                  </span>
+                </mat-list-item>
+              </mat-list>
+            </div>
+
+
+            <div class=" col-sm-7">
+
+              <div class="row m-0">
+
+                <mat-form-field class="col-sm-12 col-md-6 col-lg-6">
+                  <mat-label>Nombres*</mat-label>
+                  <input style="width:100%!important" matInput [(ngModel)]="dataForm.nombres">
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-12 col-md-6 col-lg-6">
+                  <mat-label>Apellidos*</mat-label>
+                  <input style="width:100%!important" matInput [(ngModel)]="dataForm.apellidos">
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-12 col-md-6 col-lg-8">
+                  <mat-label>Correo*</mat-label>
+                  <input style="width:100%!important" matInput type="email" [(ngModel)]="dataForm.correo">
+                </mat-form-field>
+
+                <mat-form-field class="col-sm-12 col-md-12 ">
+                  <mat-label>MENSAJE*</mat-label>
+                  <textarea matInput placeholder="" style="max-height: 200px"
+
+                            [(ngModel)]="dataForm.msj"></textarea>
+                </mat-form-field>
+
+              </div>
+              <br>
+              <button mat-raised-button color="primary" class="" style="float: right"
+                      [disabled]="isDisabledEnviar"
+                      (click)="onClickSendForm()">Envia tu Mensanje
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <p>
+            {{contactoData.details}}
+          </p>
+        </div>
+
+
+        <mat-card-footer>
+        </mat-card-footer>
+      </mat-card-content>
+
+    </mat-card-content>
+
+  </mat-card>
+
+<!--  <div class="container">-->
+<!--    <div class="row">-->
+
+<!--      <h2>OUR MANAGEMENT TEAM</h2>-->
+<!--      <div class="col-sm-6 card_about_content">-->
+<!--        <mat-card class="card_item_about">-->
+<!--          <img src="{{contactoData.urlDecode}}" alt="" class="img_round" width="100%" *ngIf="contactoData.urlDecode">-->
+<!--        </mat-card>-->
+<!--      </div>-->
+
+<!--      <div class="col-sm-6 card_about_content">-->
+<!--        <mat-card class="card_item_about">-->
+<!--          <img src="{{contactoData.urlDecode}}" alt="" class="img_round" width="100%" *ngIf="contactoData.urlDecode">-->
+<!--        </mat-card>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+</div>
+
+
+<app-footer></app-footer>

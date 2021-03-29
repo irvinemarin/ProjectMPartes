@@ -1,0 +1,40 @@
+<mat-carousel
+  timings="250ms ease-in"
+  [autoplay]="true"
+  interval="5000"
+  color="accent"
+  maxWidth="auto"
+  proportion="30"
+  [slides]="slides.length"
+  [loop]="true"
+  [hideArrows]="true"
+  [hideIndicators]="true"
+  [useKeyboard]="false"
+  [useMouseWheel]="true"
+  orientation="rtl"
+>
+
+  <mat-carousel-slide
+    *ngFor="let slide of slides; let row = index"
+    [image]="slide.urlDecode"
+    overlayColor="#00000040"
+    [hideOverlay]="false"
+  >
+    <div class="example-button-row">
+      <div class="example-flex-container">
+        <div class="example-button-container">
+          <button mat-mini-fab color="warn" aria-label="Example icon button with a delete icon">
+            <mat-icon
+              (click)="removeImg(row,slide,'SL')"
+            >delete
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+  </mat-carousel-slide>
+
+
+</mat-carousel>

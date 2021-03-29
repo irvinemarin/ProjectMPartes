@@ -1,0 +1,98 @@
+<mat-card class="col-sm-12 col-md-6" style="margin: auto!important; margin-top: 5%!important;"
+>
+  <mat-card-content style="padding: 48px!important;">
+    <div class="example-form "
+    >
+      <button mat-icon-button color="warn"
+              matTooltip="VOLVER"
+              matTooltipPosition="left"
+              routerLink="/login"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <img src="./assets/logo-pj.png" alt="">
+
+      <h2>
+
+
+        REGISTRO ABOGADO
+      </h2>
+      <div class="h2_border"></div>
+
+      <div class="row">
+
+        <div *ngFor="let form of formsList" class="col-sm-12 col-md-6 " [class.col-md-7]="form.typeInput=='mail'">
+          <div *ngIf="form.typeInput!='SEL'" style="width: 100%">
+
+            <h3 *ngIf="form.typeInput=='mail'" class="col-12">
+              DATOS USUARIO
+            </h3>
+
+
+            <mat-form-field style="width:100%!important">
+              <mat-label>{{form.label}}*</mat-label>
+              <input matInput
+                     *ngIf="form.typeInput=='text'|| form.typeInput=='date'|| form.typeInput=='mail'"
+                     [placeholder]="form.placeHolder"
+                     [type]="form.typeInput"
+                     [(ngModel)]="form.value">
+
+
+              <input style="width:100%!important" matInput
+                     *ngIf="form.typeInput=='tel'"
+                     [placeholder]="form.placeHolder"
+                     pattern="[0-9]{3}-[0-9]{2}-[0-9]"
+                     [type]="form.typeInput"
+                     [(ngModel)]="form.value">
+            </mat-form-field>
+          </div>
+
+
+          <div *ngIf="form.typeInput=='SEL'">
+            <mat-form-field appearance="fill" style="width:100%!important">
+              <mat-label>{{form.label}}*</mat-label>
+              <mat-select [(ngModel)]="form.value" name="food">
+                <mat-option *ngFor="let selectItem of form.valueSelect"
+                            [value]="selectItem.value">
+                  {{selectItem.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+
+        </div>
+
+
+      </div>
+      <br>
+      <mat-checkbox #cbxTerminosCondiciones
+                    (change)="onChangeCondition(cbxTerminosCondiciones.checked,$event)"
+                    [checked]="valueCBX"
+                    color="warn"
+                    style="color: #d60000"
+      >
+        Acepto los términos y condiciones del servicio.
+      </mat-checkbox>
+
+      <br>
+      <br>
+      <button mat-raised-button color="primary" class="col-12"
+              [disabled]="isDisabledEnviar"
+              (click)="onClickSendForm()">REGISTRAR
+      </button>
+      <br>
+      <br>
+      <h4 CLASS="align-content-center">o registrarse con ...</h4>
+      <button mat-raised-button color="" class="col-12"
+              (click)="onClickAuthGoogle()">GOOGLE
+        <img src="https://img-authors.flaticon.com/google.jpg" alt="" HEIGHT="25">
+      </button>
+
+    </div>
+
+
+  </mat-card-content>
+
+</mat-card>
+<app-footer></app-footer>

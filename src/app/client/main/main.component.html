@@ -1,0 +1,133 @@
+<app-nav-bar></app-nav-bar>
+
+<mat-carousel
+  timings="250ms ease-in"
+  [autoplay]="true"
+  interval="5000"
+  color="accent"
+  maxWidth="auto"
+  proportion="35"
+  [slides]="slides.length"
+  [loop]="true"
+  [hideArrows]="false"
+  [hideIndicators]="false"
+  [useKeyboard]="true"
+  [useMouseWheel]="true"
+
+  orientation="ltr"
+>
+
+  <mat-carousel-slide
+    #matCarouselSlide
+    *ngFor="let slide of slides; let i = index"
+    [image]="slide.urlDecode"
+    overlayColor="#00000040"
+    [hideOverlay]="false"
+  ></mat-carousel-slide>
+
+
+</mat-carousel>
+
+
+<div style="width: 70%; margin: auto;">
+  <h2>ACTIVIDADES
+
+  </h2>
+  <div class="h2_border">
+
+  </div>
+
+
+  <div class="container">
+    <div class="row flex-row flex-nowrap " style="overflow: auto;">
+      <div class="col-sm-10 col-md-4"
+           style="margin-bottom: 8px!important;"
+           *ngFor="let itemActividad of actividadesList; let index = index">
+
+        <mat-card
+          style="height: 470px">
+
+          <img
+            class="imgCard"
+            [src]="itemActividad.urlDecode">
+
+          <div
+            class="card_content">
+            <label
+              class="fecha_card">
+              {{itemActividad.dateRegister|date}}
+            </label>
+
+            <label class="tituloCard"> {{itemActividad.titulo}}</label>
+            <p class="">
+              {{itemActividad.dsc}}
+            </p>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn_readmore"
+            [routerLink]="'/detAct/'+itemActividad.id+'_D-ACT'">
+            {{valueTextButton}}
+          </button>
+
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<div style="width: 70%; margin: auto;">
+  <h2>AGENDA</h2>
+  <div class="h2_border"></div>
+
+
+  <div class="container">
+    <div class="row flex-row flex-nowrap " style="overflow: auto;height: 390px">
+      <div class="col-sm-6 col-md-3"
+           *ngFor="let itemActividad of agendaList; let index = index">
+        <mat-card
+          style="height: 370px"
+
+        >
+
+          <img
+            class="imgCard2"
+            [src]="itemActividad.urlDecode">
+
+          <div
+            class="card_content">
+            <label
+              class="fecha_card">
+              {{itemActividad.dateRegister|date}}
+            </label>
+
+            <label class="tituloCard"> {{itemActividad.titulo}}</label>
+            <p class="">
+              {{itemActividad.dsc}}
+            </p>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn_readmore"
+            [routerLink]="'/detAct/'+itemActividad.id+'_D-AGE'">
+            {{valueTextButton}}
+          </button>
+
+        </mat-card>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+<app-footer></app-footer>
