@@ -1,0 +1,209 @@
+<app-nav-bar></app-nav-bar>
+<br>
+<br>
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-lg-6 ">
+      <mat-card>
+        <mat-card-header class="p-3">
+          <mat-card-title>
+            <br>
+            DOCUMENTOS REGISTRADOS
+            <button mat-fab color="primary"
+                    matTooltip="Buscar Expediente"
+                    matTooltipPosition="left"
+                    class="right"
+                    aria-label="Example icon button with a bookmark icon">
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-3">
+          <div class="row">
+
+            <mat-form-field class="example-full-width col-lg-6 col-sm-12">
+              <mat-label>RECURSO</mat-label>
+              <input matInput readonly placeholder="seleccionar en el Boton" value="">
+            </mat-form-field>
+
+
+            <mat-form-field class="example-full-width col-lg-6 col-sm-12">
+              <mat-label>EXPEDIENTE</mat-label>
+              <input matInput readonly placeholder="seleccionar en el Boton" value="">
+            </mat-form-field>
+
+
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+
+    <div class="col-lg-6 ">
+      <mat-card>
+        <mat-card-header class="p-3">
+          <mat-card-title>
+            <br>
+            DATOS DOCUMENTOS
+
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-3">
+          <div class="row">
+
+            <mat-form-field class="example-full-width col-lg-6 col-sm-12">
+              <mat-label>TIPO ESCRITO</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let esc of SEL_TIPOESCRITOS" [value]="esc.id">
+                  {{esc.dsc}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field class="example-full-width col-lg-6 col-sm-12">
+              <mat-label>OBSERVACION</mat-label>
+              <textarea matInput class="mat-focused" placeholder="ingrese una observacion"> </textarea>
+            </mat-form-field>
+
+
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+
+    <div class="col-lg-6 ">
+      <mat-card>
+        <mat-card-header class="p-3">
+          <mat-card-title>
+            <br>
+            PARTES INVOLUCRADAS
+            <!--            <button mat-fab color="accent"-->
+            <!--                    routerLink="/reg-doc"-->
+            <!--                    matTooltip="Agregar Documento"-->
+            <!--                    matTooltipPosition="left"-->
+            <!--                    class="right"-->
+            <!--                    aria-label="Example icon button with a bookmark icon">-->
+            <!--              <mat-icon>note_add</mat-icon>-->
+            <!--            </button>-->
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-3">
+          <div class="row">
+            <div class="p-2 col-lg-6" *ngFor="let itemPersona of PERSONA_lIST">
+              <mat-card class="">
+                <mat-card-header class="p-2">
+                  <mat-card-title>
+                     <span class="material-icons">
+                      account_circle
+                     </span>
+                    {{itemPersona.dsc}}
+                    <mat-icon style=" position: absolute; right: 8px " color="warn">
+                      delete
+                    </mat-icon>
+                  </mat-card-title>
+                  <mat-card-subtitle style="padding-left: 30px">
+                    {{itemPersona.apellidoPaterno + "  " + itemPersona.apellidoMaterno}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content class="p-2">
+
+                </mat-card-content>
+              </mat-card>
+
+            </div>
+
+
+          </div>
+
+
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+
+    <div class="col-lg-6 ">
+      <mat-card>
+        <mat-card-header class="p-3">
+          <mat-card-title>
+            <br> ADJUNTAR ARCHIVOS
+
+          </mat-card-title>
+
+
+        </mat-card-header>
+        <mat-card-content class="p-3">
+          <div class="">
+            <input type="file" style="display: none" #fileInput accept="image/*"
+                   accept="application/pdf"
+                   (change)="onChangeFileInput()"/>
+            <button mat-raised-button color="primary" class="file-select-button" (click)="onClickFileInputButton()">
+              <mat-icon>attach_file</mat-icon>
+              SELECCIONAR ARCHIVO
+            </button>
+
+            <p class="file-name" *ngIf="!files; else fileName">NO ha seleccionado ningun archivo</p>
+            <ng-template #fileName>
+              <p class="file-name">{{ files?.length }} archivo(s) Seleccionados</p>
+            </ng-template>
+            {{files|json}}
+            <button mat-fab
+                    (click)="onUploadFilesClickListerner()"
+
+                    color="primary"
+                    matTooltip="Agregar Archivo"
+                    matTooltipPosition="left"
+                    style="right: 16px; position: absolute"
+                    aria-label="Example icon button with a bookmark icon">
+              <mat-icon>upload_file</mat-icon>
+            </button>
+          </div>
+
+
+          <div class="row">
+            <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_UPLOADS">
+              <mat-card class="">
+                <mat-card-header class="p-2">
+                  <mat-card-title>
+                     <span class="material-icons">
+                      picture_as_pdf
+                     </span>
+                    {{itemFile.name}}
+                    <mat-icon style=" position: absolute; right: 8px " color="warn">
+                      delete
+                    </mat-icon>
+                  </mat-card-title>
+                  <mat-card-subtitle style="padding-left: 30px">
+                    {{itemFile.apellidoPaterno + "  " + itemFile.apellidoMaterno}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content class="p-2">
+
+                </mat-card-content>
+              </mat-card>
+
+            </div>
+
+
+          </div>
+
+
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+
+  </div>
+
+</div>
+
+
+<br>
+<br>
+
+<app-footer></app-footer>

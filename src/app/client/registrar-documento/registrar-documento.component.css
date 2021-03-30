@@ -1,0 +1,14 @@
+.right {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+}
+
+mat-card {
+  margin-bottom: 10px !important;
+}
+
+.file-select-button, .file-name {
+  display: inline-block;
+  margin: 8px;
+}

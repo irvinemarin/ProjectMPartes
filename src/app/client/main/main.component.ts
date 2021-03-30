@@ -1,134 +1,111 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {Section} from '../../admin/actividades/index/index.component';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
 import {ToastrService} from 'ngx-toastr';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {BreakpointObserver} from '@angular/cdk/layout';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+
+
+/** Constants used to fill up our data base. */
+const COLORS: string[] = [
+  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
+  'aqua', 'blue', 'navy', 'black', 'gray'
+];
+const NAMES: string[] = [
+  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
+  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
+];
+
+export interface UserData {
+  id: string;
+  name: string;
+  progress: string;
+  color: string;
+}
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
-  title = 'AnProyecto02';
-  slides = [];
 
 
-  valueTextButton = 'Leer más';
-  actividadesList: Section[];
-  agendaList: Section[];
+export class MainComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
+  dataSource: MatTableDataSource<any>;
 
-
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private toastr: ToastrService,
               private service: WebServiceAPIService,
               private afStorage: AngularFireStorage,
               private breakpointObserver: BreakpointObserver
   ) {
+
+    const users = Array.from({length: 100}, (_, k) => this.createNewUser(k + 1));
+
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource(users);
+
   }
 
   ngOnInit(): void {
-    this.getActividadesWS();
-    this.getAgendasWS();
-    this.getSliderWS();
-    // this.countItemsAgenda = (window.innerWidth <= 400) ? 1 : 4;
-    // this.rowHeigthActividad = (window.innerWidth <= 400) ? '1:3.6' : '1:1.2';
-    // this.rowHeigthAgenda = (window.innerWidth <= 400) ? '1:3.6' : '1:1.2';
-    // this.PropottionAgenda = (window.innerWidth <= 400) ? 90 : 30;
-    // this.proportionActividad = (window.innerWidth <= 400) ? 90 : 30;
-    // this.detectBreakpoint();
+    // this.getActividadesWS();
 
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
-  getActividadesWS = () =>
-    this.service
-      .getActividades()
-      .subscribe(res => {
-          this.actividadesList = [];
-          res.forEach(item => {
-            let actividad = new Section;
-            actividad.id = item.id;
-            actividad.titulo = item.titulo;
-            actividad.dsc = item['dsc'];
-            actividad.dateRegister = item['dateRegister'];
-            actividad.urlName = item.urlName;
-            actividad.urlDecode = item.urlDecode;
-            this.actividadesList.push(actividad);
-          });
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-          // this.calculateDataSlider('AC');
-
-        }
-      );
-
-  getAgendasWS = () =>
-    this.service
-      .getAgendas()
-      .subscribe(res => {
-
-          this.agendaList = [];
-          res.forEach(item => {
-            let actividad = new Section;
-            actividad.id = item.id;
-            actividad.titulo = item.titulo;
-            actividad.dsc = item['dsc'];
-            actividad.dateRegister = item['dateRegister'];
-            actividad.urlName = item.urlName;
-            actividad.urlDecode = item.urlDecode;
-            this.agendaList.push(actividad);
-          });
-
-          this.calculateDataSlider('AG');
-
-
-        }
-      );
-
-  private calculateDataSlider(typeObject: string) {
-    let length = 0;
-    let divisor = 0;
-    let sliderCount = 0;
-    length = typeObject == 'AG' ? this.agendaList.length : this.actividadesList.length;
-    divisor = typeObject == 'AG' ? this.countItemsAgenda : this.colsItemsActividad;
-    // let resto = this.agendaList.length % 4;
-    let cociente = Math.round(length / divisor);
-    // let resto = 18 % 4;
-    // let decimal = cociente - Math.floor(cociente);
-    if (cociente == 0) {
-      cociente++;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
-    (typeObject == 'AG') ? this.sliderCountAgenda = cociente : this.sliderCountActividad = cociente;
   }
 
-  showSuccess(message, titlle) {
-    this.toastr.success(message, titlle);
+  /** Builds and returns a new User. */
+  createNewUser(id: number): UserData {
+    const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+
+    return {
+      id: id.toString(),
+      name: name,
+      progress: Math.round(Math.random() * 100).toString(),
+      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+    };
   }
 
-  sliderCountActividad = 3;
-  sliderCountAgenda = 0;
 
-  //method to retrieve download url
-  countItemsAgenda = 4;
-  colsItemsActividad = 3;
-  rowHeigthActividad: any;
-  rowHeigthAgenda: any;
-  PropottionAgenda: any;
-  proportionActividad: any;
-  gridRowsSpan: any;
-  gridColsSpan: any;
+  // getActividadesWS = () =>
+  //   this.service
+  //     .getActividades()
+  //     .subscribe(res => {
+  //         // this.actividadesList = [];
+  //         // res.forEach(item => {
+  //         //   let actividad = new Section;
+  //         //   actividad.id = item.id;
+  //         //   actividad.titulo = item.titulo;
+  //         //   actividad.dsc = item['dsc'];
+  //         //   actividad.dateRegister = item['dateRegister'];
+  //         //   actividad.urlName = item.urlName;
+  //         //   actividad.urlDecode = item.urlDecode;
+  //         //   this.actividadesList.push(actividad);
+  //         // });
+  //
+  //         // this.calculateDataSlider('AC');
+  //
+  //       }
+  //     );
 
-
-  getSliderWS = () =>
-    this.service.getSliders().subscribe(res => {
-        this.slides = [];
-        // console.table(res);
-        res.forEach(item => {
-          this.slides.push(item);
-        });
-
-      }
-    );
 
 }

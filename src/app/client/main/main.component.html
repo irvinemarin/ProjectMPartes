@@ -1,133 +1,74 @@
 <app-nav-bar></app-nav-bar>
+<br>
+<br>
+<div class="col-lg-8 offset-lg-2">
+  <mat-card>
+    <mat-card-header class="p-3">
+      <mat-card-title>
+        <br>
 
-<mat-carousel
-  timings="250ms ease-in"
-  [autoplay]="true"
-  interval="5000"
-  color="accent"
-  maxWidth="auto"
-  proportion="35"
-  [slides]="slides.length"
-  [loop]="true"
-  [hideArrows]="false"
-  [hideIndicators]="false"
-  [useKeyboard]="true"
-  [useMouseWheel]="true"
+        DOCUMENTOS REGISTRADOS
+        <button mat-fab color="accent"
+                routerLink="/reg-doc"
+                matTooltip="Agregar Documento"
+                matTooltipPosition="left"
+                class="right"
+                aria-label="Example icon button with a bookmark icon">
+          <mat-icon>note_add</mat-icon>
+        </button>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="p-3">
+      <mat-form-field>
+        <mat-label>Filtro</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+      </mat-form-field>
 
-  orientation="ltr"
->
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
 
-  <mat-carousel-slide
-    #matCarouselSlide
-    *ngFor="let slide of slides; let i = index"
-    [image]="slide.urlDecode"
-    overlayColor="#00000040"
-    [hideOverlay]="false"
-  ></mat-carousel-slide>
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+          </ng-container>
 
+          <!-- Progress Column -->
+          <ng-container matColumnDef="progress">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress</th>
+            <td mat-cell *matCellDef="let row"> {{row.progress}}%</td>
+          </ng-container>
 
-</mat-carousel>
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
 
+          <!-- Color Column -->
+          <ng-container matColumnDef="color">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Color</th>
+            <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+          </ng-container>
 
-<div style="width: 70%; margin: auto;">
-  <h2>ACTIVIDADES
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-  </h2>
-  <div class="h2_border">
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
 
-  </div>
-
-
-  <div class="container">
-    <div class="row flex-row flex-nowrap " style="overflow: auto;">
-      <div class="col-sm-10 col-md-4"
-           style="margin-bottom: 8px!important;"
-           *ngFor="let itemActividad of actividadesList; let index = index">
-
-        <mat-card
-          style="height: 470px">
-
-          <img
-            class="imgCard"
-            [src]="itemActividad.urlDecode">
-
-          <div
-            class="card_content">
-            <label
-              class="fecha_card">
-              {{itemActividad.dateRegister|date}}
-            </label>
-
-            <label class="tituloCard"> {{itemActividad.titulo}}</label>
-            <p class="">
-              {{itemActividad.dsc}}
-            </p>
-          </div>
-
-          <button
-            mat-raised-button
-            color="primary"
-            class="btn_readmore"
-            [routerLink]="'/detAct/'+itemActividad.id+'_D-ACT'">
-            {{valueTextButton}}
-          </button>
-
-        </mat-card>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       </div>
 
-    </div>
-  </div>
 
+    </mat-card-content>
 
+  </mat-card>
 </div>
-
-<div style="width: 70%; margin: auto;">
-  <h2>AGENDA</h2>
-  <div class="h2_border"></div>
-
-
-  <div class="container">
-    <div class="row flex-row flex-nowrap " style="overflow: auto;height: 390px">
-      <div class="col-sm-6 col-md-3"
-           *ngFor="let itemActividad of agendaList; let index = index">
-        <mat-card
-          style="height: 370px"
-
-        >
-
-          <img
-            class="imgCard2"
-            [src]="itemActividad.urlDecode">
-
-          <div
-            class="card_content">
-            <label
-              class="fecha_card">
-              {{itemActividad.dateRegister|date}}
-            </label>
-
-            <label class="tituloCard"> {{itemActividad.titulo}}</label>
-            <p class="">
-              {{itemActividad.dsc}}
-            </p>
-          </div>
-
-          <button
-            mat-raised-button
-            color="primary"
-            class="btn_readmore"
-            [routerLink]="'/detAct/'+itemActividad.id+'_D-AGE'">
-            {{valueTextButton}}
-          </button>
-
-        </mat-card>
-      </div>
-
-    </div>
-  </div>
-
-
-</div>
-
+<br>
+<br>
 
 <app-footer></app-footer>

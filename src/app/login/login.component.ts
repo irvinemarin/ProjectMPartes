@@ -128,32 +128,20 @@ export class LoginComponent implements OnInit {
   onClickAuthGoogle() {
     this.api.GoogleAuth()
       .then((result) => {
-
-
         this.api.getUserData(result.user.uid)
           .subscribe(result => {
-              result.forEach(item => {
-                console.table('asdadf : ' + item);
-                alert('bienvenido ' + item.nombres);
-
-                // if (result) {
-                //   alert('Usuario NO Registrado');
-                // } else {
-                // }
-              });
-
-
+              if (result.length > 0) {
+                // alert('bienvenido ' + result[0].nombres);
+                this.toastr.success('Bienvenido...');
+                window.location.replace('/main');
+              } else {
+                this.toastr.error('Usuario NO Registrado');
+              }
             }
             , error => {
               alert('ERROR');
             }
           )
-
-        // console.table(result);
-        // alert('bienvenido: ' +
-        //   result.user.displayName
-        // )
-
 
         ;
         this.api.SetUserData(result.user).then(r => {

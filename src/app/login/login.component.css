@@ -45,6 +45,12 @@
   }
 }
 
+@media (max-width: 992px) {
+  .md-hide {
+    display: none;
+  }
+}
+
 @media (max-width: 574px) {
   .col-xs-12 {
     width: 100% !important;

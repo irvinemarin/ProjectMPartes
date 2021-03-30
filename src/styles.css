@@ -7,12 +7,12 @@
 }
 
 .primary_color_dev {
-  background-color: var(--primary-color_dev);
-  color: var(--primary-color_text);
+  /*background-color: var(--primary-color_dev);*/
+  /*color: var(--primary-color_text);*/
 }
 
 .primary_color_footer {
-  background-color: var(--primary-color_footer);
+  /*background-color: var(--primary-color_footer);*/
 }
 
 html, body {
@@ -146,4 +146,9 @@ mat-grid-tile {
   background: #ffffff;
   border-radius: 10px;
   box-shadow: inset 7px 10px 12px #f0f0f0;
+}
+
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
 }

@@ -134,15 +134,12 @@ export class WSAuthService {
 
 
   getUserData(uid: string) {
-    console.log(uid);
 
     return this.afs.collection<any>('users', ref => ref.where('idAut', '==', uid)).snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
           const id = a.payload.doc.id;
-
-          console.table(data);
           return {id, ...data};
         });
       }));

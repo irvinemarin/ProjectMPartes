@@ -50,15 +50,16 @@ import {AdminContactoComponent} from './admin/admin-contacto/admin-contacto.comp
 import {AlertDialogContacto} from './dialogs/dialog-contacto/alert-dialog-contacto.component';
 import {LoginComponent} from './login/login.component';
 import {AngularFireAuthModule} from '@angular/fire/auth';
+import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
+import {RegistrarDocumentoComponent} from './client/registrar-documento/registrar-documento.component';
 
 const routes: Routes = [
+  {path: 'main', component: MainComponent},
   {path: '', component: LoginComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'aboutAs', component: AboutComponent},
-  {path: 'contact', component: ContactoComponent},
   {path: 'singup', component: SinUpComponent},
-  {path: 'detAct/:params', component: DetalleActividadComponent},
-  {path: 'admin/:token', component: IndexComponent},
+  {path: 'reg-doc', component: RegistrarDocumentoComponent},
 ];
 
 
@@ -85,6 +86,7 @@ registerLocaleData(localeEs, 'es');
     AdminContactoComponent,
     NavlineComponent,
     LoginComponent,
+    RegistrarDocumentoComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,7 +102,7 @@ registerLocaleData(localeEs, 'es');
     MatTabsModule,
     ToastrModule.forRoot({
       timeOut: 5000,
-      positionClass: 'toast-bottom-right',
+      positionClass: 'toast-top-right',
       preventDuplicates: true,
       progressBar: true,
       closeButton: true,
@@ -120,7 +122,9 @@ registerLocaleData(localeEs, 'es');
     AngularFirestoreModule,
     AngularFireAuthModule,
     RouterModule.forRoot(routes),
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'es'}, AngularFirestoreModule],
   bootstrap: [AppComponent]
