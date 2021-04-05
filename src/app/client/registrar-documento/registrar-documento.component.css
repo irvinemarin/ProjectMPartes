@@ -1,11 +1,7 @@
-.right {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-}
 
-mat-card {
+mat-card.card_registro {
   margin-bottom: 10px !important;
+  min-height: 220px !important;
 }
 
 .file-select-button, .file-name {

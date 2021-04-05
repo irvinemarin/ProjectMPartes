@@ -18,6 +18,11 @@ export class FooterComponent implements OnInit {
 
 
   ngOnInit() {
+    // this.getDataFirebase();
+  }
+
+  private getDataFirebase() {
+
     this.api.getDataContacto().subscribe((res: any[]) => {
       res.forEach(item => {
         if (item.id == 'data_page') {

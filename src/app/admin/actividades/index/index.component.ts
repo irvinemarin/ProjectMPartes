@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {AlertDialogDelete, DataModal} from '../../../dialogs/dialog-delete/alert-dialog-delete.component';
 import {AlertDialogCreate, DataModalCreate} from '../../../dialogs/dialog-create/alert-dialog-create.component';
 import {ToastrService} from 'ngx-toastr';
-import {DataModalImage, DialogImageFull} from '../../../dialogs/dialog-image-full/alert-dialog-create.component';
+import {DataModalMultiple, DialogMultipleFull} from '../../../dialogs/dialog-image-full/alert-dialog-create.component';
 import {WebServiceAPIService} from '../../../api/web-service-api.service';
 import {AlertDialogCreateDetail, DataModalCreateDetail} from '../../../dialogs/dialog-create-detail/alert-dialog-create-detail.component';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -300,9 +300,9 @@ export class IndexComponent implements OnInit {
   }
 
   showModalImage(url: string) {
-    const dialogo1 = this.dialog.open(DialogImageFull, {
+    const dialogo1 = this.dialog.open(DialogMultipleFull, {
       panelClass: 'app-full-bleed-dialog',
-      data: new DataModalImage(url),
+      data: new DataModalMultiple(url, null),
     });
     dialogo1.afterClosed().subscribe(result => {
       // if (result == 'CR') {//CR=CREATE

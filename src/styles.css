@@ -15,6 +15,7 @@
   /*background-color: var(--primary-color_footer);*/
 }
 
+
 html, body {
   height: 100%;
 }
@@ -151,4 +152,13 @@ mat-grid-tile {
 .container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
   padding-right: 0 !important;
   padding-left: 0 !important;
+}
+
+.right_top {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+}
+input{
+
 }

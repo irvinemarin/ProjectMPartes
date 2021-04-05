@@ -23,7 +23,7 @@ export class NavBarComponent implements OnInit {
       {titulo: 'QUIENES SOMOS', abrev: 'AB', active: false}
     );
 
-    this.getDataAPP();
+    // this.getDataAPP();
 
   }
 

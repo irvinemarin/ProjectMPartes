@@ -3,20 +3,32 @@
 <br>
 <div class="container">
 
-  <div class="row">
 
+  <div class="row">
     <div class="col-lg-6 ">
-      <mat-card>
+      <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
             <br>
             DOCUMENTOS REGISTRADOS
-            <button mat-fab color="primary"
+            <button mat-fab color="accent"
                     matTooltip="Buscar Expediente"
                     matTooltipPosition="left"
                     class="right"
+                    [class.hide]="dataFormEncontrado.recursoValue!=''"
+                    (click)="onClickBuscarExpedienteListener()"
                     aria-label="Example icon button with a bookmark icon">
               <mat-icon>search</mat-icon>
+
+            </button>
+            <button mat-fab color="warn"
+                    matTooltip="Reiniciar Busqueda"
+                    matTooltipPosition="left"
+                    class="right"
+                    [class.hide]="dataFormEncontrado.recursoValue==''"
+                    (click)="onClickCancelarBuscarExpedienteListener()"
+                    aria-label="Example icon button with a bookmark icon">
+              <mat-icon>clear</mat-icon>
             </button>
           </mat-card-title>
         </mat-card-header>
@@ -25,13 +37,15 @@
 
             <mat-form-field class="example-full-width col-lg-6 col-sm-12">
               <mat-label>RECURSO</mat-label>
-              <input matInput readonly placeholder="seleccionar en el Boton" value="">
+              <input matInput readonly placeholder="seleccionar en el Boton"
+                     [(ngModel)]="dataFormEncontrado.recursoValue">
             </mat-form-field>
 
 
             <mat-form-field class="example-full-width col-lg-6 col-sm-12">
               <mat-label>EXPEDIENTE</mat-label>
-              <input matInput readonly placeholder="seleccionar en el Boton" value="">
+              <input matInput readonly placeholder="seleccionar en el Boton"
+                     [(ngModel)]="dataFormEncontrado.expedienteValue">
             </mat-form-field>
 
 
@@ -43,7 +57,7 @@
     </div>
 
     <div class="col-lg-6 ">
-      <mat-card>
+      <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
             <br>
@@ -57,8 +71,8 @@
             <mat-form-field class="example-full-width col-lg-6 col-sm-12">
               <mat-label>TIPO ESCRITO</mat-label>
               <mat-select>
-                <mat-option *ngFor="let esc of SEL_TIPOESCRITOS" [value]="esc.id">
-                  {{esc.dsc}}
+                <mat-option *ngFor="let esc of SEL_ACTOPROCESAL" [value]="esc.c_acto_procesal">
+                  {{esc.x_documento}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -78,7 +92,7 @@
     </div>
 
     <div class="col-lg-6 ">
-      <mat-card>
+      <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
             <br>
@@ -94,41 +108,52 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="p-3">
+
           <div class="row">
-            <div class="p-2 col-lg-6" *ngFor="let itemPersona of PERSONA_lIST">
+
+
+            <p class="col-12" *ngIf="PERSONA_lIST.length==0" style="color: #b54444; padding-left: 30px">
+              Debe seleccionar un expediente primero
+              <mat-icon>warning</mat-icon>
+
+
+            </p>
+
+
+            <div class="p-2 col-lg-12" *ngFor="let itemPersona of PERSONA_lIST">
               <mat-card class="">
+                <button mat-icon-button color="warn"
+                        style=" position: absolute; right: 8px "
+                        (click)="onDeleteParteClickListener(itemPersona)"
+                        aria-label="Example icon button with a heart icon">
+                  <mat-icon>delete</mat-icon>
+                </button>
                 <mat-card-header class="p-2">
                   <mat-card-title>
                      <span class="material-icons">
                       account_circle
                      </span>
-                    {{itemPersona.dsc}}
-                    <mat-icon style=" position: absolute; right: 8px " color="warn">
-                      delete
-                    </mat-icon>
+                    {{itemPersona.x_ape_paterno + " " + itemPersona.x_ape_materno}} {{itemPersona.x_nombres}}
                   </mat-card-title>
-                  <mat-card-subtitle style="padding-left: 30px">
-                    {{itemPersona.apellidoPaterno + "  " + itemPersona.apellidoMaterno}}
-                  </mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content class="p-2">
+                  <!--                  <mat-card-subtitle style="padding-left: 30px">-->
 
+                  <!--                  </mat-card-subtitle>-->
+                </mat-card-header>
+                <mat-card-content class="pt-1 p-2">
+                  <p style="padding-left: 30px">{{itemPersona.xTipoDocumentoAbrevi}} :
+                    {{itemPersona.x_doc_id}}
+                  </p>
                 </mat-card-content>
               </mat-card>
-
             </div>
-
-
           </div>
-
-
         </mat-card-content>
 
       </mat-card>
     </div>
 
     <div class="col-lg-6 ">
-      <mat-card>
+      <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
             <br> ADJUNTAR ARCHIVOS
@@ -155,7 +180,7 @@
             <button mat-fab
                     (click)="onUploadFilesClickListerner()"
 
-                    color="primary"
+                    color="accent"
                     matTooltip="Agregar Archivo"
                     matTooltipPosition="left"
                     style="right: 16px; position: absolute"
@@ -163,27 +188,36 @@
               <mat-icon>upload_file</mat-icon>
             </button>
           </div>
-
+          <br>
 
           <div class="row">
             <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_UPLOADS">
               <mat-card class="">
                 <mat-card-header class="p-2">
+
+                  <button mat-icon-button color="warn"
+                          style=" position: absolute; right: 8px "
+                          (click)="onDeleteFileClickListener(itemFile)"
+                          aria-label="Example icon button with a heart icon">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
                   <mat-card-title>
-                     <span class="material-icons">
-                      picture_as_pdf
+                    <br>
+
+                    <span class="material-icons">
+                      <img src="assets/pdf.png" height="32px" alt="">
                      </span>
                     {{itemFile.name}}
-                    <mat-icon style=" position: absolute; right: 8px " color="warn">
-                      delete
-                    </mat-icon>
+
+
                   </mat-card-title>
-                  <mat-card-subtitle style="padding-left: 30px">
-                    {{itemFile.apellidoPaterno + "  " + itemFile.apellidoMaterno}}
-                  </mat-card-subtitle>
+
                 </mat-card-header>
                 <mat-card-content class="p-2">
-
+                    <span style="position: absolute; right: 8px ;bottom: 5px">
+                    {{itemFile.size|convertSizefile}}
+                    </span>
                 </mat-card-content>
               </mat-card>
 
@@ -196,14 +230,51 @@
         </mat-card-content>
 
       </mat-card>
+
+
     </div>
 
+    <div class="col-lg-6 offset-lg-6">
+      <br>
+      <br>
+      <div>
+        <button mat-raised-button color="accent"
+                matTooltip="REGISTRAR NUEVO EXPEDIENTE"
+                matTooltipPosition="left"
+                class="col-sm-12"
+
+        >
+
+          REGISTRAR NUEVO EXPEDIENTE
+          <mat-icon>note_add</mat-icon>
+        </button>
+
+      </div>
+
+      <br>
+      <br>
+      <!--      <button mat-fab color="primary"-->
+      <!--              matTooltip="GUARDAR EXPEDIENTE"-->
+      <!--              matTooltipPosition="left"-->
+      <!--              style="position: absolute!important; right: 10px"-->
+      <!--              -->
+      <!--      >-->
+
+      <!--        <mat-icon>save</mat-icon>-->
+      <!--      </button>-->
+
+
+    </div>
+
+
   </div>
+
 
 </div>
 
 
 <br>
-<br>
 
+
+<br>
 <app-footer></app-footer>

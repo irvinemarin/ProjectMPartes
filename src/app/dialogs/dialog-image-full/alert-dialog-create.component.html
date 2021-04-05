@@ -10,7 +10,7 @@
                       [fullImage]="UrlImage">
   </lib-ngx-image-zoom>
 
-
+  <!--FORM TERMINOS-->
   <div class="" style="width: 800px;" *ngIf="data.title=='TERMINOS'">
 
     <h2 class="center">TERMINOS Y CONDICIONES</h2>
@@ -139,6 +139,76 @@
     </mat-form-field>
     <button mat-raised-button color="primary" class="col-12"
             (click)="onClickAceptar()">ACEPTAR
+    </button>
+
+  </div>
+
+
+  <div class="" style="min-width: 500px;" *ngIf="data.title=='BUSCAR EXPEDIENTE'">
+
+    <h2 class="center">BUSCAR EXPEDIENTES
+      <button mat-fab color="primary"
+              matTooltip="Buscar Expediente"
+              matTooltipPosition="left"
+              class="right"
+              (click)="onclickBuscarExpedienteListener(sel_anio,sel_motivoIngreso)"
+              aria-label="Example icon button with a bookmark icon">
+        <mat-icon>find_in_page</mat-icon>
+      </button>
+    </h2>
+
+    <BR>
+    <div class="row">
+
+      <mat-form-field class="example-full-width col-sm-12 col-md-12 col-lg-6 ">
+        <mat-label>MOTIVO INGRESO</mat-label>
+        <mat-select
+          #sel_motivoIngreso
+        >
+          <mat-option
+            *ngFor="let itemactp of SEL_MOTIVOINGRESO"
+            [value]="itemactp.c_motivo_ingreso">
+            {{itemactp.x_desc_motivo_ingreso}}</mat-option>
+
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="example-full-width col-sm-3">
+        <mat-label>NRO SALA</mat-label>
+        <input
+          autocomplete="off"
+          type="number"
+          matInput placeholder="seleccionar en el Boton" [(ngModel)]="nroSala">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width col-sm-3 ">
+        <mat-label
+
+        >AÑO
+        </mat-label
+
+        >
+        <mat-select
+          #sel_anio
+        >
+          <mat-option value="2020">2020</mat-option>
+          <mat-option value="2020">2019</mat-option>
+          <mat-option value="2020">2018</mat-option>
+          <mat-option value="2020">2017</mat-option>
+          <mat-option value="2020">2016</mat-option>
+          <mat-option value="2020">2015</mat-option>
+          <mat-option value="2020">2014</mat-option>
+        </mat-select>
+
+
+      </mat-form-field>
+
+
+    </div>
+
+    <BR>
+    <BR>
+    <button mat-button class=""
+            (click)="onClickCancelarBusqueda()">CANCELAR
     </button>
 
   </div>

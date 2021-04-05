@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {User, WSAuthService} from '../../api/ws-api_mpartes.service';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatDialog} from '@angular/material/dialog';
-import {DataModalImage, DialogImageFull} from '../../dialogs/dialog-image-full/alert-dialog-create.component';
+import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-image-full/alert-dialog-create.component';
 import {FormItem} from './form.item';
 import {INPUTS_IDS} from './INPUTS_IDS';
 
@@ -202,9 +202,9 @@ export class SinUpComponent implements OnInit {
   onChangeCondition(checked: boolean, event) {
     if (checked == true) {
       this.valueCBX = true;
-      const dialogo1 = this.dialog.open(DialogImageFull, {
-        data: new DataModalImage(
-          'TERMINOS')
+      const dialogo1 = this.dialog.open(DialogMultipleFull, {
+        data: new DataModalMultiple(
+          'TERMINOS',null)
       });
       dialogo1.afterClosed().subscribe(result => {
         if (result != 'ACEPTAR') {
