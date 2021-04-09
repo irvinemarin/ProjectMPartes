@@ -1,18 +1,17 @@
-<mat-toolbar class="primary_color_dev" color="primary">
-  <mat-toolbar-row>
-    <span>
-      TITULO 1
-      {{dataApp["Titulo"]}}
-    </span>
-    <nav mat-tab-nav-bar
-         style="padding-left: 25px"
-    >
-      <a mat-tab-link *ngFor="let link of links"
-         (click)="redirect(link.abrev,link)"
-         [active]="link.active"> {{link.titulo}} </a>
-    </nav>
+<mat-toolbar style="background-color: #742a2a; color: white">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>INGRESO DE DOCUMENTOS </span>
+  <span class="example-spacer"></span>
+  <!--  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">-->
+  <!--    <mat-icon>favorite</mat-icon>-->
+  <!--  </button>-->
+  <button mat-icon-button class="example-icon" STYLE="padding-right: 70px"
+  (click)="singOut()"
+  >
 
-  </mat-toolbar-row>
-
+    <mat-icon>exit_to_app</mat-icon>
+    SALIR
+  </button>
 </mat-toolbar>
-

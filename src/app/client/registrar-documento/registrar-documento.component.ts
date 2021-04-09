@@ -1,8 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {JavaApiService} from '../../api/api_java/java-api.service';
-import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-image-full/alert-dialog-create.component';
+import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
 import {MatDialog} from '@angular/material/dialog';
+import {WebServiceAPIService} from '../../api/web-service-api.service';
+import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-delete/alert-dialog-delete.component';
+import {WSAuthService} from '../../api/ws-api_mpartes.service';
+
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-registrar-documento',
@@ -14,37 +19,33 @@ export class RegistrarDocumentoComponent implements OnInit {
   @ViewChild('fileInput')
   fileInput;
 
-  SEL_ACTOPROCESAL = [];
+  SEL_ACTOPROCESAL = Array<any>();
   PERSONA_lIST = [];
-  FILES_UPLOADS = [];
+  FILES_UPLOADS = Array<FileData>();
   files: Array<File> = null;
   private SEL_TIPOMOTIVO = [];
   dataFormEncontrado = {
     recursoValue: '',
     expedienteValue: '',
-    nUnico: ''
+    nUnico: '',
+    observacionValue: '',
+    tipoEscritoId: '',
+    valueTipoEscritoSelected: '',
+    nIncidente: '',
+    cInstancia: '',
+    fIngreso: ''
   };
 
   constructor(
     private toastr: ToastrService,
     private api: JavaApiService,
+    private apiFirebase: WebServiceAPIService,
+    private apiAuth: WSAuthService,
     private dialog: MatDialog,
   ) {
   }
 
   ngOnInit(): void {
-    // this.SEL_ACTOPROCESAL.push(
-    //   {id: '001', dsc: 'ESCRITO'},
-    //   {id: '002', dsc: 'ESCRITO2'},
-    //   {id: '003', dsc: 'ESCRITO3'},
-    //   {id: '004', dsc: 'ESCRITO4'},
-    // );
-    // this.PERSONA_lIST.push(
-    //   {id: '001', dsc: 'PERSONA01'},
-    //   {id: '002', dsc: 'PERSONA02'},
-    //   {id: '003', dsc: 'PERSONA03'},
-    //   {id: '004', dsc: 'PERSONA04'},
-    // );
 
     this.api.getDataInicial().subscribe((data: any[]) => {
       this.PERSONA_lIST = data['listParteExpedientes'];
@@ -53,6 +54,8 @@ export class RegistrarDocumentoComponent implements OnInit {
     }, (error) => {
       this.toastr.error('No se pudo Obtener algunos datos ACTUALIZE la pagina', '');
     });
+
+
 
 
   }
@@ -68,7 +71,9 @@ export class RegistrarDocumentoComponent implements OnInit {
 
   onUploadFilesClickListerner() {
 
-    if (this.files != null && this.files.length > 0) {
+    if (this.dataFormEncontrado.nUnico == '') {
+      this.toastr.warning('Debe seleccionar un EXPEDIENTE primero');
+    } else if (this.files != null && this.files.length > 0) {
       this.toastr.warning('Subiendo archivo');
       this.uploadFileFirebase();
 
@@ -79,11 +84,10 @@ export class RegistrarDocumentoComponent implements OnInit {
 
   private uploadFileFirebase() {
     for (let i = 0; i < this.files.length; i++) {
-      this.FILES_UPLOADS.push(this.files[i]);
+      this.subirArchivo('asd');
     }
-    this.files = null;
-    console.table(this.FILES_UPLOADS);
   }
+
 
   onClickBuscarExpedienteListener() {
     const dialogo1 = this.dialog.open(DialogMultipleFull, {
@@ -93,15 +97,13 @@ export class RegistrarDocumentoComponent implements OnInit {
     dialogo1.afterClosed().subscribe(result => {
       if (result['expediente'].n_unico != null) {
         this.PERSONA_lIST = result['listParteExpedientes'];
-        // n_ano_sala: 2020
-        // n_exp_sala: 89
-        // n_expediente: "122"
-        // n_unico: "2020001225001212"
-        // x_desc_motivo_ingreso: "NULIDAD"
-        // x_formato: "00122-2020-0-5001-SU-PE-01"
+
         this.dataFormEncontrado.recursoValue = `${result['expediente'].x_desc_motivo_ingreso} ${result['expediente'].n_exp_sala} ${result['expediente'].n_ano_sala} `;
         this.dataFormEncontrado.expedienteValue = result['expediente'].x_formato;
         this.dataFormEncontrado.nUnico = result['expediente'].n_unico;
+        this.dataFormEncontrado.nIncidente = result['expediente'].n_incidente;
+        this.dataFormEncontrado.cInstancia = result['expediente'].c_instancia;
+        this.dataFormEncontrado.fIngreso = result['expediente'].f_ingreso;
         console.log(result['expediente'].n_unico);
       }
     });
@@ -124,12 +126,245 @@ export class RegistrarDocumentoComponent implements OnInit {
         ), 1);
   }
 
-  onDeleteFileClickListener(itemFile) {
-    this.PERSONA_lIST.splice(
-      this.PERSONA_lIST
-        .findIndex(
-          x =>
-            (x.n_secuencia + '_' + x.x_doc_id) === (itemFile.n_secuencia + '_' + itemFile.x_doc_id)
-        ), 1);
+  onDeleteFileClickListener(itemFile: FileData) {
+    this.openDialogDelete(0, itemFile, 'FILE');
   }
+
+
+  openDialogDelete(postition: number, itemFile, typeObject: string): void {
+    const dialogo1 = this.dialog.open(AlertDialogDelete, {
+      data: new DataModal(
+        'Eliminar ' + itemFile.name, 'Esta seguro que quiere eliminar este documento?', typeObject, itemFile)
+    });
+    dialogo1.afterClosed().subscribe(result => {
+      if (result == 'F_DEL') {
+
+        let nunico = this.dataFormEncontrado.nUnico;
+        let desertRef = this.apiFirebase.referenciaCloudStorage(`${nunico}_${itemFile.name}`);
+        let files = this.FILES_UPLOADS;
+
+        desertRef.delete().subscribe(function(response) {
+            files.splice(files.findIndex(x =>
+              (x.urlSaved) === (itemFile.urlSaved)
+            ), 1);
+          },
+          error => {
+          }
+        );
+      }
+    });
+  }
+
+
+  porcentajeResul;
+  finalizado;
+  URLSaved = '';
+
+  //Sube el archivo a Cloud Storage
+  subirArchivo(resultCreatedID: string) {
+    let archivo = this.files[0];
+
+    let nunico = this.dataFormEncontrado.nUnico;
+    let referencia = this.apiFirebase.referenciaCloudStorage(`${nunico}_${archivo.name}`);
+    let tarea = this.apiFirebase.tareaCloudStorage(`${nunico}_${archivo.name}`, archivo);
+    referencia.getDownloadURL().subscribe((URL) => {
+      this.URLSaved = URL;
+    });
+    tarea.percentageChanges().subscribe((porcentaje) => {
+      this.porcentajeResul = Math.round(porcentaje);
+      if (this.porcentajeResul == 100) {
+        this.finalizado = true;
+        if (this.URLSaved == '') {
+          this.toastr.error('Se ha producido un Error vuelva a intentarlo');
+        } else {
+          if (this.FILES_UPLOADS.find((test) => test.urlSaved === this.URLSaved) === undefined) {
+
+            const reader2 = new FileReader();
+            let numberPages = 0;
+            reader2.readAsBinaryString(archivo);
+            reader2.onload = () => {
+              if (typeof reader2.result === 'string') {
+                numberPages = reader2.result.match(/\/Type[\s]*\/Page[^s]/g).length;
+                this.FILES_UPLOADS.push(
+                  {
+                    idParentFirebase: 'nn',
+                    nUnico: this.dataFormEncontrado.nUnico,
+                    name: archivo.name,
+                    size: archivo.size,
+                    type: archivo.type,
+                    urlSaved: this.URLSaved,
+                    numberPages: numberPages,
+                  }
+                );
+              }
+            };
+
+
+            this.files = null;
+          }
+        }
+
+
+      }
+    });
+  }
+
+
+  onClickRegistrarExpedienteListener() {
+
+    this.errors = 0;
+
+    this.validarInputs(this.dataFormEncontrado.expedienteValue, 'NO HA SELECCIONADO EXPEDIENTE');
+    this.validarInputs(this.dataFormEncontrado.recursoValue, 'NO HA SELECCIONADO RECURSO');
+    this.validarInputs(this.dataFormEncontrado.nUnico, 'EXPEDIENTE INCORRECTO');
+    this.validarInputs(this.dataFormEncontrado.tipoEscritoId, 'DEBE SELECCIONAR EL TIPO ESCRITO');
+
+    this.validarLengthList(this.FILES_UPLOADS, 'No ha Seleccionado DOCUMENTOS');
+    this.validarLengthList(this.PERSONA_lIST, 'No ha Seleccionado PARTES');
+
+    if (this.errors == 0) {
+      this.saveDataToFirebase();
+    }
+
+  }
+
+  private saveDataToFirebase() {
+    let userLogged = JSON.parse(localStorage.getItem('user'));
+    // let toDay = formatDate(new Date().toLocaleString(), 'dd/MM/y hh:mm a', 'es');
+    let toDay = new Date().toString();
+
+    let dataParent = {
+      nUnico: this.dataFormEncontrado.nUnico,
+      nIncidente: this.dataFormEncontrado.nIncidente,
+      recurso: this.dataFormEncontrado.recursoValue,
+      expediente: this.dataFormEncontrado.expedienteValue,
+      observacion: this.dataFormEncontrado.observacionValue,
+      cActoProcesalID: this.dataFormEncontrado.tipoEscritoId,
+      cActoProcesalValue: this.dataFormEncontrado.valueTipoEscritoSelected,
+      cActoProcesal: this.dataFormEncontrado.valueTipoEscritoSelected,
+      n_fojas: this.getTotalHojas(),
+      fechaIngreso: toDay,
+      nAbogadouser: userLogged.uid,
+      lEstado: 'RE'
+
+    };
+    //
+    let escritoPresentantes = this.PERSONA_lIST;
+    let escritoDocumentos = this.FILES_UPLOADS;
+    let estadoEscrito = {
+      idParentFirebase: 'nn',
+      nAnioEcrito: new Date().getFullYear(),
+      xObservacion: this.dataFormEncontrado.observacionValue,
+      nSecuencia: this.getSecuencia(),
+      fRegistro: new Date().toLocaleString(),
+    };
+    //
+    //
+    let toastr = this.toastr;
+    let idDocRef = '';
+    let apiFirebaseChilds = this.apiFirebase;
+    this.apiFirebase.registrarEscritos(dataParent, apiFirebaseChilds)
+      .then(function(docRef) {
+        alert(docRef.id);
+        idDocRef = docRef.id;
+
+        //REGISTRO PRESENTANTES
+        escritoPresentantes.forEach(itemPresentantes => {
+          itemPresentantes['idParentFirebase'] = idDocRef;
+          apiFirebaseChilds.savePresentates(itemPresentantes)
+            .then(result => {
+              }
+            )
+            .catch(error =>
+              toastr.error(`Error al registrar PRESENTANTES del documento : ${error}`));
+        });
+
+        //REGISTRO DOCUMENTOS
+        escritoDocumentos.forEach(itemEscrito => {
+          itemEscrito.idParentFirebase = idDocRef;
+          apiFirebaseChilds.saveDocumento(itemEscrito)
+            .then(result => {
+              }
+            )
+            .catch(error =>
+              toastr.error(`Error al registrar ARCHIVOS del documento : ${error}`));
+
+        });
+
+        estadoEscrito.idParentFirebase = idDocRef;
+        apiFirebaseChilds.saveEstadoEscrito(estadoEscrito)
+          .then(result => {
+            }
+          )
+          .catch(error =>
+            toastr.error(`Error al registrar ESTADO del documento : ${error}`));
+
+        //SUCCESS REGISTRO
+        toastr.success('registro completo');
+        window.location.replace('/main');
+      })
+
+      .catch(
+        error => {
+          toastr.error('SERVICIOS NO DISPONIBLES');
+        }
+      );
+  }
+
+  private getSecuencia(): string {
+    let secuencia = 0;
+
+    this.apiAuth.getSecuenciaData('asdadf')
+      .subscribe(result => {
+          if (result.length > 0) {
+          } else {
+            this.toastr.warning(`SECUNCIA : ${result.length}`);
+          }
+
+          secuencia = result.length;
+        }
+        , error => {
+          alert('ERROR');
+        }
+      );
+    return `${secuencia + 1}`;
+  }
+
+  private getTotalHojas(): number {
+    let nfojas = 0;
+    this.FILES_UPLOADS.forEach(item => {
+      nfojas = nfojas + item.numberPages;
+    });
+    return nfojas;
+  }
+
+  private validarLengthList(list: any[], msj: string) {
+    if (list.length == 0) {
+      this.toastr.warning(msj);
+      this.errors++;
+    }
+  }
+
+  errors = 0;
+
+  private validarInputs(valueText: string, imputName: string) {
+    if (valueText == '') {
+      this.errors++;
+      this.toastr.warning(`${imputName}`);
+    }
+  }
+
+  onChangeValue(tesc: string, x_documento: any) {
+    this.dataFormEncontrado.valueTipoEscritoSelected = x_documento;
+  }
+}
+
+export interface FileData {
+  idParentFirebase: string;
+  name: string;
+  size: number;
+  type: string;
+  urlSaved: string;
+  numberPages: number;
+  nUnico: string;
 }

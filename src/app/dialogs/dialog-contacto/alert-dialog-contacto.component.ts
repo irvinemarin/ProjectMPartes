@@ -71,7 +71,7 @@ export class AlertDialogContacto implements OnInit {
 
     let value = this.inputValue;
 
-    this.api.editContactoData(value, this.wichObject)
+    this.api.editData(value, this.wichObject, 'EN')
       .then((response) => {
         this.dialogRef.close('Updated');
         value = '';

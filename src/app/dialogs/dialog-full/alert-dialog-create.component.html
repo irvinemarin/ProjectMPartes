@@ -143,7 +143,7 @@
 
   </div>
 
-
+  <!--FORM BUSCAR EXPEDIENTE-->
   <div class="" style="min-width: 500px;" *ngIf="data.title=='BUSCAR EXPEDIENTE'">
 
     <h2 class="center">BUSCAR EXPEDIENTES
@@ -209,6 +209,72 @@
     <BR>
     <button mat-button class=""
             (click)="onClickCancelarBusqueda()">CANCELAR
+    </button>
+
+  </div>
+
+  <!--FORM EDITAR ARCHIVOS ESCRITO-->
+  <div class="" style="min-width: 500px;" *ngIf="data.title=='EDITAR EXPEDIENTE'">
+
+    <h2 class="center">{{data.title}}
+
+    </h2>
+
+    <BR>
+    <div class="row">
+
+
+      <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_LIST">
+        <mat-card class="">
+          <mat-card-header class="p-2">
+
+            <button mat-icon-button color="warn"
+                    style=" position: absolute; right: 8px "
+                    (click)="onDeleteFileClickListener(itemFile)"
+                    aria-label="Example icon button with a heart icon">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+            <mat-card-title>
+
+              <br>
+              <!--                    <mat-progress-bar mode="determinate"-->
+              <!--                                      [class.hide]="itemFile.percent==100"-->
+              <!--                                      [value]="itemFile.percent"></mat-progress-bar>-->
+
+              <span class="material-icons">
+                      <img src="assets/pdf.png" height="32px" alt="">
+                     </span>
+              <a style="text-decoration: none" [href]="itemFile.urlSaved" target="_blank"> {{itemFile.name}}</a>
+              <br>
+<!--              <button mat-icon-button color="warn"-->
+<!--                      style=" position: absolute; right: 8px;color: #baab2a "-->
+
+<!--                      aria-label="Example icon button with a heart icon">-->
+<!--                <mat-icon>local_play</mat-icon>-->
+<!--              </button>-->
+
+            </mat-card-title>
+
+          </mat-card-header>
+          <mat-card-content class="p-4">
+            Paginas: {{itemFile.numberPages}}
+
+            <span style="position: absolute; right: 8px ;">
+                    Tamaño : {{itemFile.size|convertSizefile}}
+                    </span>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+
+
+    </div>
+
+    <BR>
+    <BR>
+    <button mat-button class=""
+            (click)="onClickCancelarEliminarArchivo()">CANCELAR
     </button>
 
   </div>

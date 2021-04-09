@@ -14,5 +14,16 @@ table {
 }
 
 td, th {
-  width: 25%;
+  min-width: 10%;
+}
+.blue-state {
+  background-color: #40c5e8 !important;
+}
+
+.green-state {
+  background-color: #78c978 !important;
+}
+
+.red-state {
+  background-color: #fe5555 !important;
 }

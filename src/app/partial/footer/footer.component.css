@@ -1,5 +1,7 @@
 .footer-primary-color {
-  background-color: #673ab7 !important;
+  background-color: #585858 !important;
+  color: #c6c6c6;
+  flex: 1 auto;
 }
 
 mat-selection-list {

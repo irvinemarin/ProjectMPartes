@@ -36,7 +36,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
-import {DialogMultipleFull} from './dialogs/dialog-image-full/alert-dialog-create.component';
+import {DialogMultipleFull} from './dialogs/dialog-full/alert-dialog-create.component';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
@@ -55,6 +55,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {RegistrarDocumentoComponent} from './client/registrar-documento/registrar-documento.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ConvertSizefilePipe} from '../pipes/convert-sizefile.pipe';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatBadgeModule} from '@angular/material/badge';
 
 const routes: Routes = [
   {path: 'main', component: MainComponent},
@@ -100,6 +102,8 @@ registerLocaleData(localeEs, 'es');
     MatButtonModule,
     MatGridListModule,
     MatCardModule,
+    MatProgressBarModule,
+    MatBadgeModule,
     NgxImageZoomModule,
     MatDatepickerModule,
     MatPaginatorModule,

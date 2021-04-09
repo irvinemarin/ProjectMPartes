@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
+import {WSAuthService} from '../../api/ws-api_mpartes.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,7 +11,8 @@ export class NavBarComponent implements OnInit {
   txtBuscarValue: '';
 
   constructor(
-    private api: WebServiceAPIService
+    private api: WebServiceAPIService,
+    private apiAuth: WSAuthService
   ) {
     window.scrollTo(0, 0);
   }
@@ -42,20 +44,20 @@ export class NavBarComponent implements OnInit {
 
   redirect(nameComponent: string, link: any): void {
 
-
-    if (nameComponent == 'AB') {
-      window.location.replace('/aboutAs');
-    } else if (nameComponent == 'CO') {
-      window.location.replace('/contact');
-    } else {
-      window.location.replace('');
-    }
-    this.links.forEach(element => {
-      element.active = false;
-      if (element == link) {
-        link.active = true;
-      }
-    });
+    //
+    // if (nameComponent == 'AB') {
+    //   window.location.replace('/aboutAs');
+    // } else if (nameComponent == 'CO') {
+    //   window.location.replace('/contact');
+    // } else {
+    //   window.location.replace('');
+    // }
+    // this.links.forEach(element => {
+    //   element.active = false;
+    //   if (element == link) {
+    //     link.active = true;
+    //   }
+    // });
 
 
   }
@@ -64,4 +66,7 @@ export class NavBarComponent implements OnInit {
   activeLink = this.links[0];
 
 
+  singOut() {
+    this.apiAuth.SignOut();
+  }
 }

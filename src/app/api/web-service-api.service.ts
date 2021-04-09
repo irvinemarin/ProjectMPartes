@@ -3,13 +3,13 @@ import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firest
 import {Section} from '../admin/actividades/index/index.component';
 import {AngularFireStorage} from '@angular/fire/storage';
 import firebase from 'firebase';
-import DocumentData = firebase.firestore.DocumentData;
 import {map} from 'rxjs/operators';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AlertDialogCreate} from '../dialogs/dialog-create/alert-dialog-create.component';
 import {AlertDialogCreateDetail} from '../dialogs/dialog-create-detail/alert-dialog-create-detail.component';
 import {AlertDialogDelete} from '../dialogs/dialog-delete/alert-dialog-delete.component';
 import {ToastrService} from 'ngx-toastr';
+import DocumentData = firebase.firestore.DocumentData;
 
 
 @Injectable({
@@ -54,8 +54,8 @@ export class WebServiceAPIService {
   }
 
 
-  getActividades() {
-    return this.ActividadesCollection.snapshotChanges().pipe(
+  getEscritosList() {
+    return this.firestore.collection<any>('escritos').snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
@@ -225,6 +225,7 @@ export class WebServiceAPIService {
       }));
   }
 
+
   sendMessage(dataForm, toast: ToastrService, clear: void) {
     return this.firestore
       .collection('escritos')
@@ -232,27 +233,43 @@ export class WebServiceAPIService {
 
   }
 
-  editContactoData(inputValue: string, wichObject: string) {
+  registrarEscritos(dataForm, apiFirebaseChilds: WebServiceAPIService) {
+    return this.firestore
+      .collection('escritos')
+      .add(Object.assign({}, dataForm));
 
+  }
 
+  editData(valueToChange: string, wichObject: string, lEstadoToChange: string) {
     let db = firebase.firestore();
     let dataUpdate = {};
-
     switch (wichObject) {
       case 'DIR':
-        dataUpdate = {direccion: inputValue};
+        dataUpdate = {direccion: valueToChange};
         break;
       case 'TEL':
-        dataUpdate = {telefono: inputValue};
+        dataUpdate = {telefono: valueToChange};
         break;
       case 'EMA':
-        dataUpdate = {email: inputValue};
+        dataUpdate = {email: valueToChange};
+        break;
+      case 'ESC':
+
+        dataUpdate = {lEstado: lEstadoToChange};
         break;
     }
 
-    return db.collection('contacto').doc('data_page').update(
-      dataUpdate
-    );
+
+    if (wichObject == 'ESC') {
+      return db.collection('escritos').doc(valueToChange).update(
+        dataUpdate
+      );
+    } else {
+      return db.collection('contacto').doc('data_page').update(
+        dataUpdate
+      );
+    }
+
   }
 
   getMessagesContacto() {
@@ -265,6 +282,41 @@ export class WebServiceAPIService {
 
         });
       }));
+  }
+
+
+  saveDocumento(escritoDocumentos) {
+    return this.firestore
+      .collection('escritosDocumentos')
+      .add(Object.assign({}, escritoDocumentos));
+  }
+
+  savePresentates(itemPresentantes) {
+    return this.firestore
+      .collection('escritosPresentantes')
+      .add(Object.assign({}, itemPresentantes));
+  }
+
+  saveEstadoEscrito(estadoEscrito) {
+    return this.firestore
+      .collection('estadoEscrito')
+      .add(Object.assign({}, estadoEscrito));
+  }
+
+  getDataEscritosDocumentos(idRef: string) {
+    return this.firestore.collection<any>('escritosDocumentos', ref => ref.where('idParentFirebase', '==', idRef)).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return {id, ...data};
+
+        });
+      }));
+  }
+
+  deleteDataItem(ref: string, idItem: string) {
+    return this.firestore.collection(ref).doc(idItem).delete();
   }
 }
 

@@ -127,11 +127,24 @@ export class LoginComponent implements OnInit {
 
   onClickAuthGoogle() {
     this.api.GoogleAuth()
-      .then((result) => {
-        this.api.getUserData(result.user.uid)
+      .then((resultAuth) => {
+        this.api.getUserData(resultAuth.user.uid)
           .subscribe(result => {
               if (result.length > 0) {
                 // alert('bienvenido ' + result[0].nombres);
+
+
+                this.afAuth.authState.subscribe(user => {
+                  if (user) {
+                    localStorage.setItem('user', JSON.stringify(user));
+                    JSON.parse(localStorage.getItem('user'));
+                  } else {
+                    localStorage.setItem('user', null);
+                    JSON.parse(localStorage.getItem('user'));
+                  }
+                });
+
+
                 this.toastr.success('Bienvenido...');
                 window.location.replace('/main');
               } else {
@@ -144,7 +157,7 @@ export class LoginComponent implements OnInit {
           )
 
         ;
-        this.api.SetUserData(result.user).then(r => {
+        this.api.SetUserData(resultAuth.user).then(r => {
         });
       }).catch((error) => {
 

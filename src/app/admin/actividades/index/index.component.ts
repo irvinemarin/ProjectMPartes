@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {AlertDialogDelete, DataModal} from '../../../dialogs/dialog-delete/alert-dialog-delete.component';
 import {AlertDialogCreate, DataModalCreate} from '../../../dialogs/dialog-create/alert-dialog-create.component';
 import {ToastrService} from 'ngx-toastr';
-import {DataModalMultiple, DialogMultipleFull} from '../../../dialogs/dialog-image-full/alert-dialog-create.component';
+import {DataModalMultiple, DialogMultipleFull} from '../../../dialogs/dialog-full/alert-dialog-create.component';
 import {WebServiceAPIService} from '../../../api/web-service-api.service';
 import {AlertDialogCreateDetail, DataModalCreateDetail} from '../../../dialogs/dialog-create-detail/alert-dialog-create-detail.component';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -81,7 +81,7 @@ export class IndexComponent implements OnInit {
   }
 
   getActividadesWS = () =>
-    this.api.getActividades().subscribe(res => {
+    this.api.getEscritosList().subscribe(res => {
         this.actividadListDB = [];
         console.table(res);
         res.forEach(item => {

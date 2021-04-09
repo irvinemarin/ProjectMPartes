@@ -70,8 +70,12 @@
 
             <mat-form-field class="example-full-width col-lg-6 col-sm-12">
               <mat-label>TIPO ESCRITO</mat-label>
-              <mat-select>
-                <mat-option *ngFor="let esc of SEL_ACTOPROCESAL" [value]="esc.c_acto_procesal">
+              <mat-select [(ngModel)]="dataFormEncontrado.tipoEscritoId"
+
+              >
+                <mat-option
+                  (onSelectionChange)="onChangeValue('T_ESC',esc.x_documento)"
+                  *ngFor="let esc of SEL_ACTOPROCESAL" [value]="esc.c_acto_procesal">
                   {{esc.x_documento}}
                 </mat-option>
               </mat-select>
@@ -80,7 +84,9 @@
 
             <mat-form-field class="example-full-width col-lg-6 col-sm-12">
               <mat-label>OBSERVACION</mat-label>
-              <textarea matInput class="mat-focused" placeholder="ingrese una observacion"> </textarea>
+              <textarea matInput class="mat-focused"
+                        [(ngModel)]="dataFormEncontrado.observacionValue"
+                        placeholder="ingrese una observacion"> </textarea>
             </mat-form-field>
 
 
@@ -176,7 +182,7 @@
             <ng-template #fileName>
               <p class="file-name">{{ files?.length }} archivo(s) Seleccionados</p>
             </ng-template>
-            {{files|json}}
+
             <button mat-fab
                     (click)="onUploadFilesClickListerner()"
 
@@ -191,11 +197,12 @@
           <br>
 
           <div class="row">
-            <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_UPLOADS">
+            <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_UPLOADS ;let i = index">
               <mat-card class="">
                 <mat-card-header class="p-2">
 
                   <button mat-icon-button color="warn"
+                          *ngIf="i>0"
                           style=" position: absolute; right: 8px "
                           (click)="onDeleteFileClickListener(itemFile)"
                           aria-label="Example icon button with a heart icon">
@@ -203,20 +210,33 @@
                   </button>
 
                   <mat-card-title>
+
                     <br>
+                    <!--                    <mat-progress-bar mode="determinate"-->
+                    <!--                                      [class.hide]="itemFile.percent==100"-->
+                    <!--                                      [value]="itemFile.percent"></mat-progress-bar>-->
 
                     <span class="material-icons">
                       <img src="assets/pdf.png" height="32px" alt="">
                      </span>
-                    {{itemFile.name}}
+                    <a style="text-decoration: none" [href]="itemFile.urlSaved" target="_blank"> {{itemFile.name}}</a>
+                    <br>
+                    <button mat-stroked-button color="warn"
+                            style=" position: absolute; right: 8px;color: #baab2a "
 
+                            aria-label="Example icon button with a heart icon">
+                      DOCUMENTO PRINCIPAL
+                      <mat-icon>local_play</mat-icon>
+                    </button>
 
                   </mat-card-title>
 
                 </mat-card-header>
-                <mat-card-content class="p-2">
-                    <span style="position: absolute; right: 8px ;bottom: 5px">
-                    {{itemFile.size|convertSizefile}}
+                <mat-card-content class="p-4">
+                  Paginas: {{itemFile.numberPages}}
+
+                  <span style="position: absolute; right: 8px ;">
+                    Tamaño : {{itemFile.size|convertSizefile}}
                     </span>
                 </mat-card-content>
               </mat-card>
@@ -242,6 +262,7 @@
                 matTooltip="REGISTRAR NUEVO EXPEDIENTE"
                 matTooltipPosition="left"
                 class="col-sm-12"
+                (click)="onClickRegistrarExpedienteListener()"
 
         >
 
@@ -253,19 +274,10 @@
 
       <br>
       <br>
-      <!--      <button mat-fab color="primary"-->
-      <!--              matTooltip="GUARDAR EXPEDIENTE"-->
-      <!--              matTooltipPosition="left"-->
-      <!--              style="position: absolute!important; right: 10px"-->
-      <!--              -->
-      <!--      >-->
-
-      <!--        <mat-icon>save</mat-icon>-->
-      <!--      </button>-->
 
 
     </div>
-
+    {{dataFormEncontrado|json}}
 
   </div>
 

@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import auth = firebase.auth;
 import {INPUTS_IDS} from '../client/sin-up/INPUTS_IDS';
 import {map} from 'rxjs/operators';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 export interface User {
   idAut: string;
@@ -36,11 +37,14 @@ export class WSAuthService {
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
+    private storage: AngularFireStorage,
     public ngZone: NgZone // NgZone service to remove outside scope warning
   ) {
 
     /* Saving user data in localstorage when
        logged in and setting up null when logged out */
+
+
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userData = user;
@@ -121,7 +125,7 @@ export class WSAuthService {
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['sign-in']);
+      this.router.navigate(['login']);
     });
   }
 
@@ -141,9 +145,26 @@ export class WSAuthService {
           const data = a.payload.doc.data();
           const id = a.payload.doc.id;
           return {id, ...data};
+
         });
       }));
   }
+
+
+  getSecuenciaData(uidEscrito: string) {
+
+    return this.afs.collection<any>('estadoEscrito', ref => ref.where('uidEscrito', '==', uidEscrito)).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return {id, ...data};
+          // return data
+        });
+      }));
+  }
+
+
 }
 
 

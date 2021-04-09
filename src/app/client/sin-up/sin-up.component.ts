@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {User, WSAuthService} from '../../api/ws-api_mpartes.service';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatDialog} from '@angular/material/dialog';
-import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-image-full/alert-dialog-create.component';
+import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
 import {FormItem} from './form.item';
 import {INPUTS_IDS} from './INPUTS_IDS';
 
@@ -32,7 +32,7 @@ export class SinUpComponent implements OnInit {
   constructor(
     public afs: AngularFirestore,
     private toastr: ToastrService,
-    private api: WSAuthService,
+    private apiAuth: WSAuthService,
     private route: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog,
@@ -100,7 +100,7 @@ export class SinUpComponent implements OnInit {
 
   private executeUseCase(email: string, password: string) {
     if (this.errorForms == 0) {
-      this.api.SignUp(email, password)
+      this.apiAuth.SignUp(email, password)
         .then((resul) => {
 
           console.log(resul.user);
@@ -125,7 +125,7 @@ export class SinUpComponent implements OnInit {
       idAut: user.uid,
       email: user.email,
       displayName: this.getValueOfForm(this.formsList, INPUTS_IDS.USERNAME),
-      photoURL: '',
+      photoURL: user.photoURL,
       emailVerified: false,
       apellidoPaterno: this.getValueOfForm(this.formsList, INPUTS_IDS.APELLIDO_PAT),
       apellidoMaterno: this.getValueOfForm(this.formsList, INPUTS_IDS.APELLIDO_MAT),
@@ -139,7 +139,7 @@ export class SinUpComponent implements OnInit {
       sinoe: this.getValueOfForm(this.formsList, INPUTS_IDS.SINOE),
 
     };
-    this.api.SetUserData(userData).then()
+    this.apiAuth.SetUserData(userData).then()
       .catch();
   }
 
@@ -182,7 +182,7 @@ export class SinUpComponent implements OnInit {
     this.errorForms = 0;
     this.validateTerminos(this.valueCBX);
     if (this.errorForms == 0) {
-      this.api.GoogleAuth()
+      this.apiAuth.GoogleAuth()
         .then((result) => {
           console.table(result);
           // this.ngZone.run(() => {
@@ -204,7 +204,7 @@ export class SinUpComponent implements OnInit {
       this.valueCBX = true;
       const dialogo1 = this.dialog.open(DialogMultipleFull, {
         data: new DataModalMultiple(
-          'TERMINOS',null)
+          'TERMINOS', null)
       });
       dialogo1.afterClosed().subscribe(result => {
         if (result != 'ACEPTAR') {
