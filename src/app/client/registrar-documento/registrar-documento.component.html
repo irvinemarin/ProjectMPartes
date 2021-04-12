@@ -5,13 +5,34 @@
 
 
   <div class="row">
-    <div class="col-lg-6 ">
+
+    <button mat-icon-button color="warn"
+            matTooltip="VOLVER"
+            matTooltipPosition="left"
+            routerLink="/main"
+            class="sm-hide"
+            STYLE="position: absolute;left: 20%"
+            aria-label="Example icon button with a bookmark icon">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button mat-icon-button color="warn"
+            matTooltip="VOLVER"
+            matTooltipPosition="left"
+            routerLink="/main"
+            STYLE="position: absolute;left: 10px"
+            class="lg-hide"
+            aria-label="Example icon button with a bookmark icon">
+      <mat-icon>arrow_back</mat-icon>
+
+    </button>
+
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
       <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
             <br>
-            DOCUMENTOS REGISTRADOS
-            <button mat-fab color="accent"
+            BUSCAR EXPEDIENTE
+            <button mat-fab color="primary"
                     matTooltip="Buscar Expediente"
                     matTooltipPosition="left"
                     class="right"
@@ -56,7 +77,7 @@
       </mat-card>
     </div>
 
-    <div class="col-lg-6 ">
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
       <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
@@ -97,13 +118,13 @@
       </mat-card>
     </div>
 
-    <div class="col-lg-6 ">
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
       <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
             <br>
             PARTES INVOLUCRADAS
-            <!--            <button mat-fab color="accent"-->
+            <!--            <button mat-fab color="primary"-->
             <!--                    routerLink="/reg-doc"-->
             <!--                    matTooltip="Agregar Documento"-->
             <!--                    matTooltipPosition="left"-->
@@ -129,6 +150,7 @@
             <div class="p-2 col-lg-12" *ngFor="let itemPersona of PERSONA_lIST">
               <mat-card class="">
                 <button mat-icon-button color="warn"
+                        *ngIf="PERSONA_lIST.length>1"
                         style=" position: absolute; right: 8px "
                         (click)="onDeleteParteClickListener(itemPersona)"
                         aria-label="Example icon button with a heart icon">
@@ -158,7 +180,7 @@
       </mat-card>
     </div>
 
-    <div class="col-lg-6 ">
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
       <mat-card class="card_registro">
         <mat-card-header class="p-3">
           <mat-card-title>
@@ -169,9 +191,11 @@
 
         </mat-card-header>
         <mat-card-content class="p-3">
+          ARCHIVOS CARGADOS: {{countUploadSuccess}}
           <div class="">
             <input type="file" style="display: none" #fileInput accept="image/*"
                    accept="application/pdf"
+                   multiple="multiple"
                    (change)="onChangeFileInput()"/>
             <button mat-raised-button color="primary" class="file-select-button" (click)="onClickFileInputButton()">
               <mat-icon>attach_file</mat-icon>
@@ -186,7 +210,7 @@
             <button mat-fab
                     (click)="onUploadFilesClickListerner()"
 
-                    color="accent"
+                    color="primary"
                     matTooltip="Agregar Archivo"
                     matTooltipPosition="left"
                     style="right: 16px; position: absolute"
@@ -197,12 +221,13 @@
           <br>
 
           <div class="row">
+
             <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_UPLOADS ;let i = index">
               <mat-card class="">
                 <mat-card-header class="p-2">
 
                   <button mat-icon-button color="warn"
-                          *ngIf="i>0"
+                          *ngIf="FILES_UPLOADS.length>1"
                           style=" position: absolute; right: 8px "
                           (click)="onDeleteFileClickListener(itemFile)"
                           aria-label="Example icon button with a heart icon">
@@ -222,11 +247,17 @@
                     <a style="text-decoration: none" [href]="itemFile.urlSaved" target="_blank"> {{itemFile.name}}</a>
                     <br>
                     <button mat-stroked-button color="warn"
-                            style=" position: absolute; right: 8px;color: #baab2a "
+                            style=" position: absolute; right: 8px;color: #4a4a4a  "
+                            (click)="onSetDocumentoPrincipalClickListener(itemFile)"
+
+                            [class.is_doc_princpal]="itemFile.isDocPrincipal"
 
                             aria-label="Example icon button with a heart icon">
-                      DOCUMENTO PRINCIPAL
-                      <mat-icon>local_play</mat-icon>
+                      <span *ngIf="itemFile.isDocPrincipal">DOCUMENTO PRINCIPAL</span>
+                      <span *ngIf="!itemFile.isDocPrincipal">ANEXO</span>
+                      <!--                      <mat-icon>local_play</mat-icon>-->
+                      <mat-icon>{{itemFile.isDocPrincipal ? 'local_play' : 'file_present'}}</mat-icon>
+
                     </button>
 
                   </mat-card-title>
@@ -254,11 +285,11 @@
 
     </div>
 
-    <div class="col-lg-6 offset-lg-6">
+    <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
       <br>
       <br>
       <div>
-        <button mat-raised-button color="accent"
+        <button mat-raised-button color="primary"
                 matTooltip="REGISTRAR NUEVO EXPEDIENTE"
                 matTooltipPosition="left"
                 class="col-sm-12"
@@ -277,7 +308,6 @@
 
 
     </div>
-    {{dataFormEncontrado|json}}
 
   </div>
 

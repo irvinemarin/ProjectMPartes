@@ -1,6 +1,6 @@
 import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertDialogDelete, DataModal} from '../../../dialogs/dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete, DataModal} from '../../../dialogs/dialog-warning/alert-dialog-delete.component';
 import {AlertDialogCreate, DataModalCreate} from '../../../dialogs/dialog-create/alert-dialog-create.component';
 import {ToastrService} from 'ngx-toastr';
 import {DataModalMultiple, DialogMultipleFull} from '../../../dialogs/dialog-full/alert-dialog-create.component';

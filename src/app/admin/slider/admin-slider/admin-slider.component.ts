@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {WebServiceAPIService} from '../../../api/web-service-api.service';
 import {Section} from '../../actividades/index/index.component';
-import {AlertDialogDelete, DataModal} from '../../../dialogs/dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete, DataModal} from '../../../dialogs/dialog-warning/alert-dialog-delete.component';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({

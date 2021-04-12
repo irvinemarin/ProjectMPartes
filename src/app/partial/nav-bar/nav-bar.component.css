@@ -35,6 +35,13 @@ section {
   flex: 1 1 auto;
 }
 
+.img_profile {
+  margin-top: -6px !important;
+
+  height: 35px !important;
+  border-radius: 50% !important;
+}
+
 /*.mat-icon {*/
 /*  background-color: gray !important;*/
 /*}*/

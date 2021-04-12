@@ -7,7 +7,7 @@ import {map} from 'rxjs/operators';
 import {MatDialogRef} from '@angular/material/dialog';
 import {AlertDialogCreate} from '../dialogs/dialog-create/alert-dialog-create.component';
 import {AlertDialogCreateDetail} from '../dialogs/dialog-create-detail/alert-dialog-create-detail.component';
-import {AlertDialogDelete} from '../dialogs/dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete} from '../dialogs/dialog-warning/alert-dialog-delete.component';
 import {ToastrService} from 'ngx-toastr';
 import DocumentData = firebase.firestore.DocumentData;
 
@@ -240,28 +240,33 @@ export class WebServiceAPIService {
 
   }
 
-  editData(valueToChange: string, wichObject: string, lEstadoToChange: string) {
+  editData(docRefID: string, wichObject: string, valueToChange) {
     let db = firebase.firestore();
     let dataUpdate = {};
     switch (wichObject) {
       case 'DIR':
-        dataUpdate = {direccion: valueToChange};
+        dataUpdate = {direccion: docRefID};
         break;
       case 'TEL':
-        dataUpdate = {telefono: valueToChange};
+        dataUpdate = {telefono: docRefID};
         break;
       case 'EMA':
-        dataUpdate = {email: valueToChange};
+        dataUpdate = {email: docRefID};
         break;
       case 'ESC':
 
-        dataUpdate = {lEstado: lEstadoToChange};
+        dataUpdate = {lEstado: valueToChange};
         break;
     }
 
 
     if (wichObject == 'ESC') {
-      return db.collection('escritos').doc(valueToChange).update(
+      return db.collection('escritos').doc(docRefID).update(
+        dataUpdate
+      );
+    } else if (wichObject == 'ESC_DOC') {
+      dataUpdate = {isDocPrincipal: valueToChange};
+      return db.collection('escritosDocumentos').doc(docRefID).update(
         dataUpdate
       );
     } else {

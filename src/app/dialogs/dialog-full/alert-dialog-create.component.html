@@ -214,7 +214,7 @@
   </div>
 
   <!--FORM EDITAR ARCHIVOS ESCRITO-->
-  <div class="" style="min-width: 500px;" *ngIf="data.title=='EDITAR EXPEDIENTE'">
+  <div class="" style="min-width: 500px;" *ngIf="data.title=='EDITAR DOCUMENTOS ADJUNTOS'">
 
     <h2 class="center">{{data.title}}
 
@@ -224,11 +224,12 @@
     <div class="row">
 
 
-      <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_LIST">
+      <div class="p-2 col-lg-12" *ngFor="let itemFile of FILES_LIST;let row=index">
         <mat-card class="">
           <mat-card-header class="p-2">
 
             <button mat-icon-button color="warn"
+                    *ngIf="row>0"
                     style=" position: absolute; right: 8px "
                     (click)="onDeleteFileClickListener(itemFile)"
                     aria-label="Example icon button with a heart icon">
@@ -247,12 +248,19 @@
                      </span>
               <a style="text-decoration: none" [href]="itemFile.urlSaved" target="_blank"> {{itemFile.name}}</a>
               <br>
-<!--              <button mat-icon-button color="warn"-->
-<!--                      style=" position: absolute; right: 8px;color: #baab2a "-->
+              <button mat-stroked-button color="warn"
+                      style=" position: absolute; right: 8px;color: #4a4a4a  "
+                      (click)="onSetDocumentoPrincipalClickListener(itemFile)"
 
-<!--                      aria-label="Example icon button with a heart icon">-->
-<!--                <mat-icon>local_play</mat-icon>-->
-<!--              </button>-->
+                      [class.is_doc_princpal]="itemFile.isDocPrincipal"
+
+                      aria-label="Example icon button with a heart icon">
+                <span *ngIf="itemFile.isDocPrincipal">DOCUMENTO PRINCIPAL</span>
+                <span *ngIf="!itemFile.isDocPrincipal">ANEXO</span>
+                <!--                      <mat-icon>local_play</mat-icon>-->
+                <mat-icon>{{itemFile.isDocPrincipal ? 'local_play' : 'file_present'}}</mat-icon>
+
+              </button>
 
             </mat-card-title>
 

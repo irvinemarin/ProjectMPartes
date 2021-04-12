@@ -7,11 +7,29 @@
   <!--  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">-->
   <!--    <mat-icon>favorite</mat-icon>-->
   <!--  </button>-->
-  <button mat-icon-button class="example-icon" STYLE="padding-right: 70px"
-  (click)="singOut()"
-  >
 
+
+  <button mat-icon-button class="example-icon" STYLE="padding-right: 10px"
+          (click)="onChangeThemeClickListener()"
+  >
+    <mat-icon>{{icon_theme}}</mat-icon>
+
+  </button>
+  <button mat-icon-button class="example-icon" STYLE="padding-right: 70px"
+          (click)="singOut()">
     <mat-icon>exit_to_app</mat-icon>
     SALIR
   </button>
+
+
+  <button
+    matBadge="*"
+    [matBadgeHidden]="hideBadge"
+    mat-button class="example-icon" STYLE="padding-right: 35px">
+    {{username}}
+    <mat-icon><img [src]="imgUserProfile" class="img_profile" alt=""></mat-icon>
+
+  </button>
+
+
 </mat-toolbar>

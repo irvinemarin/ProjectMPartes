@@ -4,7 +4,7 @@ import {JavaApiService} from '../../api/api_java/java-api.service';
 import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
 import {MatDialog} from '@angular/material/dialog';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
-import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-warning/alert-dialog-delete.component';
 import {WSAuthService} from '../../api/ws-api_mpartes.service';
 
 import {formatDate} from '@angular/common';
@@ -56,8 +56,6 @@ export class RegistrarDocumentoComponent implements OnInit {
     });
 
 
-
-
   }
 
 
@@ -83,9 +81,11 @@ export class RegistrarDocumentoComponent implements OnInit {
   }
 
   private uploadFileFirebase() {
+    this.countUploadSuccess = 0;
     for (let i = 0; i < this.files.length; i++) {
-      this.subirArchivo('asd');
+      this.subirArchivo('asd', this.files[i]);
     }
+
   }
 
 
@@ -155,29 +155,28 @@ export class RegistrarDocumentoComponent implements OnInit {
     });
   }
 
-
-  porcentajeResul;
-  finalizado;
-  URLSaved = '';
+  countUploadSuccess = 0;
 
   //Sube el archivo a Cloud Storage
-  subirArchivo(resultCreatedID: string) {
-    let archivo = this.files[0];
-
+  subirArchivo(resultCreatedID: string, file: File) {
+    let archivo = file;
+    let URLSaved;
     let nunico = this.dataFormEncontrado.nUnico;
     let referencia = this.apiFirebase.referenciaCloudStorage(`${nunico}_${archivo.name}`);
     let tarea = this.apiFirebase.tareaCloudStorage(`${nunico}_${archivo.name}`, archivo);
     referencia.getDownloadURL().subscribe((URL) => {
-      this.URLSaved = URL;
+
+      URLSaved = URL;
     });
     tarea.percentageChanges().subscribe((porcentaje) => {
-      this.porcentajeResul = Math.round(porcentaje);
-      if (this.porcentajeResul == 100) {
-        this.finalizado = true;
-        if (this.URLSaved == '') {
+      let porcentajeResul;
+      porcentajeResul = Math.round(porcentaje);
+      if (porcentajeResul == 100) {
+
+        if (URLSaved == '') {
           this.toastr.error('Se ha producido un Error vuelva a intentarlo');
         } else {
-          if (this.FILES_UPLOADS.find((test) => test.urlSaved === this.URLSaved) === undefined) {
+          if (this.FILES_UPLOADS.find((test) => test.urlSaved === URLSaved) === undefined) {
 
             const reader2 = new FileReader();
             let numberPages = 0;
@@ -192,21 +191,27 @@ export class RegistrarDocumentoComponent implements OnInit {
                     name: archivo.name,
                     size: archivo.size,
                     type: archivo.type,
-                    urlSaved: this.URLSaved,
+                    urlSaved: URLSaved,
                     numberPages: numberPages,
+                    isDocPrincipal: false,
                   }
                 );
+                this.countUploadSuccess++;
+                if (this.countUploadSuccess == this.files.length) {
+                  this.files = null;
+                }
               }
             };
 
 
-            this.files = null;
           }
         }
 
 
       }
     });
+
+
   }
 
 
@@ -222,8 +227,25 @@ export class RegistrarDocumentoComponent implements OnInit {
     this.validarLengthList(this.FILES_UPLOADS, 'No ha Seleccionado DOCUMENTOS');
     this.validarLengthList(this.PERSONA_lIST, 'No ha Seleccionado PARTES');
 
+    this.validarDocumentoPrincipal();
+
     if (this.errors == 0) {
       this.saveDataToFirebase();
+    }
+
+  }
+
+  private validarDocumentoPrincipal() {
+    let thereAreDocPrincipal = false;
+    this.FILES_UPLOADS.forEach(item => {
+      if (item.isDocPrincipal == true) {
+        thereAreDocPrincipal = true;
+      }
+    });
+
+    if (!thereAreDocPrincipal) {
+      this.errors++;
+      this.toastr.warning('Debe seleccionar un documentos principal');
     }
 
   }
@@ -357,9 +379,32 @@ export class RegistrarDocumentoComponent implements OnInit {
   onChangeValue(tesc: string, x_documento: any) {
     this.dataFormEncontrado.valueTipoEscritoSelected = x_documento;
   }
+
+  onSetDocumentoPrincipalClickListener(itemFile) {
+
+    this.FILES_UPLOADS.forEach(item => {
+      item.isDocPrincipal = false;
+    });
+
+
+    // let valueDefault = false;
+    if (!itemFile.isDocPrincipal) {
+      itemFile.isDocPrincipal = true;
+    } else {
+      itemFile.isDocPrincipal = false;
+    }
+
+
+    // this.apiFirebase.editData(itemFile.id, 'ESC_DOC', valueDefault)
+    //   .then(response => {
+    //
+    //   })
+    //   .catch();
+  }
 }
 
 export interface FileData {
+  isDocPrincipal: boolean;
   idParentFirebase: string;
   name: string;
   size: number;

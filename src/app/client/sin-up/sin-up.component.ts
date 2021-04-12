@@ -185,9 +185,9 @@ export class SinUpComponent implements OnInit {
       this.apiAuth.GoogleAuth()
         .then((result) => {
           console.table(result);
-          // this.ngZone.run(() => {
-          //   this.router.navigate(['']);
-          // });
+
+          this.router.navigate(['/main']);
+
           this.SetUserData(result.user);
         }).catch((error) => {
 

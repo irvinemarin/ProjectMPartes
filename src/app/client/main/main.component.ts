@@ -7,7 +7,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-warning/alert-dialog-delete.component';
 import {MatDialog} from '@angular/material/dialog';
 import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
 
@@ -146,7 +146,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   openDialogEdit(postition: number, itemEscrito: any, typeObject: string): void {
     const dialogo1 = this.dialog.open(DialogMultipleFull, {
       data: new DataModalMultiple(
-        'EDITAR EXPEDIENTE', itemEscrito,)
+        'EDITAR DOCUMENTOS ADJUNTOS', itemEscrito,)
     });
     dialogo1.afterClosed().subscribe(result => {
       if (result == 'E_EDITED') {

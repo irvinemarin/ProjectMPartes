@@ -1,14 +1,12 @@
 <app-nav-bar></app-nav-bar>
 <br>
 <br>
-<div class="col-lg-8 offset-lg-2">
+<div class="col-lg-10 offset-lg-1">
   <mat-card>
     <mat-card-header class="p-3">
       <mat-card-title>
-        <br>
-
         DOCUMENTOS REGISTRADOS
-        <button mat-fab color="accent"
+        <button mat-fab color="primary"
                 routerLink="/reg-doc"
                 matTooltip="Agregar Documento"
                 matTooltipPosition="left"
@@ -21,7 +19,7 @@
     <mat-card-content class="p-3">
       <mat-form-field style="width: 30%!important;">
         <mat-label>Filtro</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. NULIDAD... ESCRITO" #input>
       </mat-form-field>
 
       <div class="mat-elevation-z8">
@@ -65,14 +63,13 @@
                 [class.blue-state]="row.lEstado=='EN'"
                 [class.green-state]="row.lEstado=='RE'"
                 [class.red-state]="row.lEstado=='EL'"
-
               >
 
                 {{row.estadoValue}}
               </span>
               <span
                 style="margin-left: 30px"
-                matTooltip="Observacion"
+                [matTooltip]="row.observacion.toUpperCase()"
                 matTooltipPosition="right"
                 *ngIf="row.observacion!=''"
               >
@@ -112,12 +109,12 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
           <!-- Row shown when there is no matching data. -->
-<!--          <tr class="mat-row" *matNoDataRow>-->
-<!--            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>-->
-<!--          </tr>-->
+          <!--          <tr class="mat-row" *matNoDataRow>-->
+          <!--            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>-->
+          <!--          </tr>-->
         </table>
 
-<!--        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>-->
+        <!--        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>-->
       </div>
 
 

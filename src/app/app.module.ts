@@ -27,7 +27,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMenuModule} from '@angular/material/menu';
-import {AlertDialogDelete} from './dialogs/dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete} from './dialogs/dialog-warning/alert-dialog-delete.component';
 import {AlertDialogCreate} from './dialogs/dialog-create/alert-dialog-create.component';
 import {AlertDialogCreateDetail} from './dialogs/dialog-create-detail/alert-dialog-create-detail.component';
 import {ToastrModule} from 'ngx-toastr';

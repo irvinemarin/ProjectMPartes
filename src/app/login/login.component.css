@@ -39,23 +39,6 @@
   /*background-repeat: repeat;*/
 }
 
-@media (max-width: 767px) {
-  .sm-hide {
-    display: none;
-  }
-}
-
-@media (max-width: 992px) {
-  .md-hide {
-    display: none;
-  }
-}
-
-@media (max-width: 574px) {
-  .col-xs-12 {
-    width: 100% !important;
-  }
-}
 
 .btn_reloadCode {
   top: 40px !important;

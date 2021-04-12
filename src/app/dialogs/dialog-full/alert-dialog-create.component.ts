@@ -5,7 +5,7 @@ import {JavaApiService} from '../../api/api_java/java-api.service';
 import {ToastrService} from 'ngx-toastr';
 import {FileData} from '../../client/registrar-documento/registrar-documento.component';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
-import {AlertDialogDelete, DataModal} from '../dialog-delete/alert-dialog-delete.component';
+import {AlertDialogDelete, DataModal} from '../dialog-warning/alert-dialog-delete.component';
 import {toBase64String} from '@angular/compiler/src/output/source_map';
 
 export class DataModalMultiple {
@@ -30,7 +30,7 @@ export class DialogMultipleFull implements OnInit {
   public itemDeleted = false;
   SEL_MOTIVOINGRESO = [];
   nroSala = '';
-  FILES_LIST: Array<FileData>;
+  FILES_LIST: Array<any>;
 
 
   constructor(
@@ -47,7 +47,7 @@ export class DialogMultipleFull implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.data.title == 'EDITAR EXPEDIENTE') {
+    if (this.data.title == 'EDITAR DOCUMENTOS ADJUNTOS') {
       this.apiFirebase.getDataEscritosDocumentos(this.data.objectData.id).subscribe((res: any[]) => {
         this.FILES_LIST = res;
 
@@ -124,7 +124,6 @@ export class DialogMultipleFull implements OnInit {
         );
 
 
-
         this.apiFirebase.deleteDataItem('escritosDocumentos', itemFile.id)
           .then(function(response) {
             toast.success('Archivo Eliminado');
@@ -139,6 +138,35 @@ export class DialogMultipleFull implements OnInit {
 
   onClickCancelarEliminarArchivo() {
     this.dialogRef.close('CANCEL');
+  }
+
+  onSetDocumentoPrincipalClickListener(itemFile) {
+    this.FILES_LIST.forEach(item => {
+      item.isDocPrincipal = false;
+    });
+
+    if (!itemFile.isDocPrincipal) {
+      itemFile.isDocPrincipal = true;
+    } else {
+      itemFile.isDocPrincipal = false;
+    }
+
+    this.FILES_LIST.forEach(itemFor => {
+
+      console.log('idDocumento : ' + itemFor['id']);
+
+      this.apiFirebase.editData(itemFor['id'], 'ESC_DOC', itemFor.isDocPrincipal)
+        .then(response => {
+          this.toastr.success('Cambios Guardados');
+        })
+        .catch(
+          error => {
+            this.toastr.error('Cambios NO GUARDADOS');
+          }
+        );
+    });
+
+
   }
 }
 
