@@ -14,6 +14,12 @@ export class NavBarComponent implements OnInit, AfterViewInit {
   txtBuscarValue: '';
   imgUserProfile = '';
   hideBadge = true;
+  MENU_LIST = [
+    {text: 'Configuración', icon: 'manage_accounts'},
+    {text: 'Salir', icon: 'exit_to_app'},
+
+
+  ];
 
   constructor(
     private api: WebServiceAPIService,
@@ -142,4 +148,11 @@ export class NavBarComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onOptionsMenuClickListener(menu) {
+    if (menu.text == 'Salir') {
+      this.singOut();
+    } else {
+      this.toastr.warning('Click : ' + menu.text);
+    }
+  }
 }

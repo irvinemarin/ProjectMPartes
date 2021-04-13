@@ -223,7 +223,6 @@ export class RegistrarDocumentoComponent implements OnInit {
     this.validarInputs(this.dataFormEncontrado.recursoValue, 'NO HA SELECCIONADO RECURSO');
     this.validarInputs(this.dataFormEncontrado.nUnico, 'EXPEDIENTE INCORRECTO');
     this.validarInputs(this.dataFormEncontrado.tipoEscritoId, 'DEBE SELECCIONAR EL TIPO ESCRITO');
-
     this.validarLengthList(this.FILES_UPLOADS, 'No ha Seleccionado DOCUMENTOS');
     this.validarLengthList(this.PERSONA_lIST, 'No ha Seleccionado PARTES');
 
@@ -369,10 +368,10 @@ export class RegistrarDocumentoComponent implements OnInit {
 
   errors = 0;
 
-  private validarInputs(valueText: string, imputName: string) {
+  private validarInputs(valueText: string, msj: string) {
     if (valueText == '') {
       this.errors++;
-      this.toastr.warning(`${imputName}`);
+      this.toastr.warning(`${msj}`);
     }
   }
 

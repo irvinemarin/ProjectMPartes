@@ -124,14 +124,6 @@
           <mat-card-title>
             <br>
             PARTES INVOLUCRADAS
-            <!--            <button mat-fab color="primary"-->
-            <!--                    routerLink="/reg-doc"-->
-            <!--                    matTooltip="Agregar Documento"-->
-            <!--                    matTooltipPosition="left"-->
-            <!--                    class="right"-->
-            <!--                    aria-label="Example icon button with a bookmark icon">-->
-            <!--              <mat-icon>note_add</mat-icon>-->
-            <!--            </button>-->
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="p-3">
@@ -227,7 +219,7 @@
                 <mat-card-header class="p-2">
 
                   <button mat-icon-button color="warn"
-                          *ngIf="FILES_UPLOADS.length>1"
+
                           style=" position: absolute; right: 8px "
                           (click)="onDeleteFileClickListener(itemFile)"
                           aria-label="Example icon button with a heart icon">
@@ -237,9 +229,7 @@
                   <mat-card-title>
 
                     <br>
-                    <!--                    <mat-progress-bar mode="determinate"-->
-                    <!--                                      [class.hide]="itemFile.percent==100"-->
-                    <!--                                      [value]="itemFile.percent"></mat-progress-bar>-->
+
 
                     <span class="material-icons">
                       <img src="assets/pdf.png" height="32px" alt="">

@@ -1,7 +1,9 @@
 <mat-toolbar style="background-color: #742a2a; color: white">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
-  </button>
+  <!--  <button mat-icon-button class="example-icon"-->
+  <!--          -->
+  <!--          aria-label="Example icon-button with menu icon">-->
+  <!--    <mat-icon>menu</mat-icon>-->
+  <!--  </button>-->
   <span>INGRESO DE DOCUMENTOS </span>
   <span class="example-spacer"></span>
   <!--  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">-->
@@ -15,21 +17,44 @@
     <mat-icon>{{icon_theme}}</mat-icon>
 
   </button>
-  <button mat-icon-button class="example-icon" STYLE="padding-right: 70px"
-          (click)="singOut()">
-    <mat-icon>exit_to_app</mat-icon>
-    SALIR
-  </button>
+  <!--  <button mat-icon-button class="example-icon" STYLE="padding-right: 70px"-->
+  <!--          (click)="singOut()">-->
+  <!--    <mat-icon>exit_to_app</mat-icon>-->
+  <!--    SALIR-->
+  <!--  </button>-->
 
 
   <button
     matBadge="*"
     [matBadgeHidden]="hideBadge"
-    mat-button class="example-icon" STYLE="padding-right: 35px">
+    (click)="drawer.toggle()"
+    mat-button class="example-icon">
+    <img [src]="imgUserProfile" class="img_profile" alt="">
     {{username}}
-    <mat-icon><img [src]="imgUserProfile" class="img_profile" alt=""></mat-icon>
+
+    <mat-icon>menu</mat-icon>
 
   </button>
 
 
 </mat-toolbar>
+
+<mat-drawer-container class="example-container" hasBackdrop="false">
+  <mat-drawer #drawer
+              position="end"
+              style="width: 100%!important;min-width: 40px"
+              mode="over">
+    <mat-selection-list #shoes [multiple]="false">
+      <mat-list-option *ngFor="let menu of MENU_LIST" [value]="menu"
+                       (click)="onOptionsMenuClickListener(menu)">
+        <mat-icon
+          mat-list-icon>{{menu.icon}}
+        </mat-icon>
+        {{menu.text}}
+      </mat-list-option>
+    </mat-selection-list>
+
+
+  </mat-drawer>
+
+</mat-drawer-container>

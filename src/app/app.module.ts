@@ -57,6 +57,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ConvertSizefilePipe} from '../pipes/convert-sizefile.pipe';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 const routes: Routes = [
   {path: 'main', component: MainComponent},
@@ -102,6 +103,7 @@ registerLocaleData(localeEs, 'es');
     MatButtonModule,
     MatGridListModule,
     MatCardModule,
+    MatSidenavModule,
     MatProgressBarModule,
     MatBadgeModule,
     NgxImageZoomModule,
