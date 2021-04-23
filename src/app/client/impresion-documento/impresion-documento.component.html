@@ -1,0 +1,98 @@
+<div class="container" style="width: 21.7cm; height: 29.7cm; max-width: 21.7cm!important;">
+  <div class="row ">
+    <div class="">
+      <div class="card-content" style="padding: 2.5cm!important;">
+        <h2 CLASS="marca-agua">CARGO</h2>
+        <img src="assets/logo-pj.png" alt="" class="img-logo">
+        <br>
+        <br>
+        <h4 class="center" style="font-size: 25px !important; ">
+
+          PODER JUDICIAL DEL PERU <br>
+
+          CORTE SUPREMA DE JUSTICIA DE LA REPUBLICA <br>
+
+          Cargo Documento {{data.cod_documento}}</h4>
+        <div class="container " style="font-size: 12px;">
+          <br>
+          <br>
+          <div class="row ">
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                RECURSO :
+              </div>
+              <div class="col-lg-6" #recurso>
+                {{data.recurso}}
+              </div>
+            </div>
+
+
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                SALA SUPREMA :
+              </div>
+              <div class="col-lg-6">
+                {{data.sala}}
+              </div>
+            </div>
+
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                FECHA PRESENTACION :
+              </div>
+              <div class="col-lg-6" #fecha>
+                {{data.fecha|date}}
+              </div>
+            </div>
+
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                DOCUMENTO PRINCIPAL :
+              </div>
+              <div class="col-lg-6" #documento>
+                {{data.documento}}
+              </div>
+            </div>
+
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                CANTIDAD DOCUMENTO :
+              </div>
+              <div class="col-lg-6" #cantd>
+                {{data.cantd}}
+              </div>
+            </div>
+
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                FOLIOS :
+              </div>
+              <div class="col-lg-6" #folios>
+                {{data.folios}}
+              </div>
+            </div>
+
+            <div class="itemrow ">
+              <div class="col-lg-6">
+                PRESENTANTE DOCUMENTO :
+              </div>
+              <div class="col-lg-6" #prestante>
+                {{data.prestante}}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="footer_custom center col s10 offset-s1">
+      Av. Paseo de la República S/N Palacio de Justicia, Cercado, Lima - Perú Copyright©-2020
+    </div>
+  </div>
+
+</div>
+

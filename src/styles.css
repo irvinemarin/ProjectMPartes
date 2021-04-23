@@ -24,6 +24,13 @@ body {
   min-width: 632px !important;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #e5e5e5;
+}
+
+body::after {
+  background-image: url("assets/icon.png");
+  background-repeat: repeat;
+
 }
 
 .hide {
@@ -117,10 +124,6 @@ mat-grid-tile {
   font-weight: bold !important;
 }
 
-
-.footer-primary-color {
-  background-color: #673ab7 !important;
-}
 
 .example-tooltip-background {
   background: #00be41 !important;

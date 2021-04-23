@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ToastrService} from 'ngx-toastr';
+import {ActiveToast, ToastrService} from 'ngx-toastr';
 import {JavaApiService} from '../../api/api_java/java-api.service';
 import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -8,6 +8,8 @@ import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-warning/alert-d
 import {WSAuthService} from '../../api/ws-api_mpartes.service';
 
 import {formatDate} from '@angular/common';
+import {Observable} from 'rxjs';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-registrar-documento',
@@ -33,12 +35,13 @@ export class RegistrarDocumentoComponent implements OnInit {
     valueTipoEscritoSelected: '',
     nIncidente: '',
     cInstancia: '',
-    fIngreso: ''
+    fIngreso: '',
+    xInstancia: ''
   };
 
   constructor(
     private toastr: ToastrService,
-    private api: JavaApiService,
+    private apiJava: JavaApiService,
     private apiFirebase: WebServiceAPIService,
     private apiAuth: WSAuthService,
     private dialog: MatDialog,
@@ -47,10 +50,13 @@ export class RegistrarDocumentoComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.api.getDataInicial().subscribe((data: any[]) => {
-      this.PERSONA_lIST = data['listParteExpedientes'];
-      this.SEL_ACTOPROCESAL = data['listActoProcesal'];
-      this.SEL_TIPOMOTIVO = data['listTipoMotivo'];
+    this.apiFirebase.getDataInicial('listActoProcesal').subscribe((data: any[]) => {
+      this.SEL_ACTOPROCESAL = data;
+    }, (error) => {
+      this.toastr.error('No se pudo Obtener algunos datos ACTUALIZE la pagina', '');
+    });
+    this.apiFirebase.getDataInicial('listTipoMotivo').subscribe((data: any[]) => {
+      this.SEL_TIPOMOTIVO = data;
     }, (error) => {
       this.toastr.error('No se pudo Obtener algunos datos ACTUALIZE la pagina', '');
     });
@@ -72,18 +78,24 @@ export class RegistrarDocumentoComponent implements OnInit {
     if (this.dataFormEncontrado.nUnico == '') {
       this.toastr.warning('Debe seleccionar un EXPEDIENTE primero');
     } else if (this.files != null && this.files.length > 0) {
-      this.toastr.warning('Subiendo archivo');
-      this.uploadFileFirebase();
+      this.hideProggesUpload = false;
+
+      const toastrCallbacl = this.toastr.warning('Subiendo archivo', '',
+        {disableTimeOut: true}
+      );
+
+
+      this.uploadFileFirebase(toastrCallbacl);
 
     } else {
       this.toastr.warning('Debe seleccionar almenos un archivo');
     }
   }
 
-  private uploadFileFirebase() {
+  private uploadFileFirebase(toastrUploadFile: ActiveToast<any>) {
     this.countUploadSuccess = 0;
     for (let i = 0; i < this.files.length; i++) {
-      this.subirArchivo('asd', this.files[i]);
+      this.subirArchivo('asd', this.files[i], toastrUploadFile);
     }
 
   }
@@ -95,16 +107,16 @@ export class RegistrarDocumentoComponent implements OnInit {
         'BUSCAR EXPEDIENTE', this.SEL_TIPOMOTIVO)
     });
     dialogo1.afterClosed().subscribe(result => {
-      if (result['expediente'].n_unico != null) {
-        this.PERSONA_lIST = result['listParteExpedientes'];
-
-        this.dataFormEncontrado.recursoValue = `${result['expediente'].x_desc_motivo_ingreso} ${result['expediente'].n_exp_sala} ${result['expediente'].n_ano_sala} `;
-        this.dataFormEncontrado.expedienteValue = result['expediente'].x_formato;
-        this.dataFormEncontrado.nUnico = result['expediente'].n_unico;
-        this.dataFormEncontrado.nIncidente = result['expediente'].n_incidente;
-        this.dataFormEncontrado.cInstancia = result['expediente'].c_instancia;
-        this.dataFormEncontrado.fIngreso = result['expediente'].f_ingreso;
-        console.log(result['expediente'].n_unico);
+      // alert(JSON.stringify(result));
+      if (result != null && result.n_unico != null) {
+        this.PERSONA_lIST = result['listParte'];
+        this.dataFormEncontrado.recursoValue = `${result.x_desc_motivo_ingreso} ${result.n_exp_sala} ${result.n_ano_sala} `;
+        this.dataFormEncontrado.expedienteValue = result.x_formato;
+        this.dataFormEncontrado.nUnico = result.n_unico;
+        this.dataFormEncontrado.nIncidente = result.n_incidente;
+        this.dataFormEncontrado.cInstancia = result.c_instancia;
+        this.dataFormEncontrado.fIngreso = result.f_ingreso;
+        this.dataFormEncontrado.xInstancia = result.x_nom_instancia;
       }
     });
   }
@@ -156,27 +168,21 @@ export class RegistrarDocumentoComponent implements OnInit {
   }
 
   countUploadSuccess = 0;
+  URLSaved = '';
 
-  //Sube el archivo a Cloud Storage
-  subirArchivo(resultCreatedID: string, file: File) {
-    let archivo = file;
-    let URLSaved;
+
+  pushFileToStorage(archivo: File, toastrCallbacl: ActiveToast<any>) {
     let nunico = this.dataFormEncontrado.nUnico;
-    let referencia = this.apiFirebase.referenciaCloudStorage(`${nunico}_${archivo.name}`);
-    let tarea = this.apiFirebase.tareaCloudStorage(`${nunico}_${archivo.name}`, archivo);
-    referencia.getDownloadURL().subscribe((URL) => {
+    const filePath = `${nunico}/${archivo.name}`;
+    const storageRef = this.apiFirebase.referenciaCloudStorage(filePath);
+    const uploadTask = this.apiFirebase.tareaCloudStorage(filePath, archivo);
 
-      URLSaved = URL;
-    });
-    tarea.percentageChanges().subscribe((porcentaje) => {
-      let porcentajeResul;
-      porcentajeResul = Math.round(porcentaje);
-      if (porcentajeResul == 100) {
+    uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        storageRef.getDownloadURL().subscribe(downloadURL => {
 
-        if (URLSaved == '') {
-          this.toastr.error('Se ha producido un Error vuelva a intentarlo');
-        } else {
-          if (this.FILES_UPLOADS.find((test) => test.urlSaved === URLSaved) === undefined) {
+
+          if (this.FILES_UPLOADS.find((test) => test.urlSaved === this.URLSaved) === undefined) {
 
             const reader2 = new FileReader();
             let numberPages = 0;
@@ -191,13 +197,16 @@ export class RegistrarDocumentoComponent implements OnInit {
                     name: archivo.name,
                     size: archivo.size,
                     type: archivo.type,
-                    urlSaved: URLSaved,
+                    urlSaved: downloadURL,
                     numberPages: numberPages,
                     isDocPrincipal: false,
                   }
                 );
                 this.countUploadSuccess++;
                 if (this.countUploadSuccess == this.files.length) {
+                  this.hideProggesUpload = true;
+
+                  this.toastr.remove(toastrCallbacl.toastId);
                   this.files = null;
                 }
               }
@@ -205,13 +214,19 @@ export class RegistrarDocumentoComponent implements OnInit {
 
 
           }
-        }
 
 
-      }
-    });
+        });
+      })
+    ).subscribe();
+
+    // return uploadTask.percentageChanges();
+  }
 
 
+  //Sube el archivo a Cloud Storage
+  subirArchivo(resultCreatedID: string, file: File, toastrCallbacl: ActiveToast<any>) {
+    this.pushFileToStorage(file, toastrCallbacl);
   }
 
 
@@ -266,7 +281,12 @@ export class RegistrarDocumentoComponent implements OnInit {
       n_fojas: this.getTotalHojas(),
       fechaIngreso: toDay,
       nAbogadouser: userLogged.uid,
-      lEstado: 'RE'
+      lEstado: 'RE',
+      cantDoc: this.FILES_UPLOADS.length,
+      docPrincipalName: this.getDocumentPrincipal(),
+      presentante0: this.PERSONA_lIST[0].x_ape_paterno + ' ' + this.PERSONA_lIST[0].x_ape_materno + ', ' + this.PERSONA_lIST[0].x_nombres,
+      instancia: this.dataFormEncontrado.xInstancia
+
 
     };
     //
@@ -286,7 +306,7 @@ export class RegistrarDocumentoComponent implements OnInit {
     let apiFirebaseChilds = this.apiFirebase;
     this.apiFirebase.registrarEscritos(dataParent, apiFirebaseChilds)
       .then(function(docRef) {
-        alert(docRef.id);
+
         idDocRef = docRef.id;
 
         //REGISTRO PRESENTANTES
@@ -327,9 +347,19 @@ export class RegistrarDocumentoComponent implements OnInit {
 
       .catch(
         error => {
-          toastr.error('SERVICIOS NO DISPONIBLES');
+          toastr.error('SERVICIOS NO DISPONIBLES' + error.message);
         }
       );
+  }
+
+  private getDocumentPrincipal(): any {
+    let itemResult = '';
+    this.FILES_UPLOADS.forEach(item => {
+      if (item.isDocPrincipal) {
+        itemResult = item.name;
+      }
+    });
+    return itemResult;
   }
 
   private getSecuencia(): string {
@@ -337,10 +367,10 @@ export class RegistrarDocumentoComponent implements OnInit {
 
     this.apiAuth.getSecuenciaData('asdadf')
       .subscribe(result => {
-          if (result.length > 0) {
-          } else {
-            this.toastr.warning(`SECUNCIA : ${result.length}`);
-          }
+          // if (result.length > 0) {
+          // } else {
+          //   this.toastr.warning(`SECUNCIA : ${result.length}`);
+          // }
 
           secuencia = result.length;
         }
@@ -367,6 +397,7 @@ export class RegistrarDocumentoComponent implements OnInit {
   }
 
   errors = 0;
+  hideProggesUpload = true;
 
   private validarInputs(valueText: string, msj: string) {
     if (valueText == '') {

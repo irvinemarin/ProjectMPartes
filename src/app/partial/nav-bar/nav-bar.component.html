@@ -1,27 +1,41 @@
-<mat-toolbar style="background-color: #742a2a; color: white">
-  <!--  <button mat-icon-button class="example-icon"-->
-  <!--          -->
-  <!--          aria-label="Example icon-button with menu icon">-->
-  <!--    <mat-icon>menu</mat-icon>-->
-  <!--  </button>-->
-  <span>INGRESO DE DOCUMENTOS </span>
+<mat-toolbar
+  style="
+         background-color: #742a2a;
+         color: white;
+         position: fixed;
+         z-index: 10;
+         margin-top: -20px;
+
+          ">
+
+
+  <span> <img src="assets/icon.png" alt=""> INGRESO DE DOCUMENTOS </span>
   <span class="example-spacer"></span>
-  <!--  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">-->
-  <!--    <mat-icon>favorite</mat-icon>-->
-  <!--  </button>-->
 
 
-  <button mat-icon-button class="example-icon" STYLE="padding-right: 10px"
-          (click)="onChangeThemeClickListener()"
-  >
-    <mat-icon>{{icon_theme}}</mat-icon>
+<!--  <button mat-button [matMenuTriggerFor]="menu">-->
+<!--    <mat-icon>format_size</mat-icon>-->
+<!--  </button>-->
+<!--  <mat-menu #menu="matMenu" class="row">-->
+<!--    <button mat-menu-item disabled>-->
+<!--      <span>Tamaño Fuente</span>-->
+<!--    </button>-->
+<!--    <button class="col-6" mat-raised-button-->
+<!--            (click)="onChangeFontSizeClickListener('up')"-->
+<!--    >-->
+<!--      <mat-icon>text_rotate_up</mat-icon>-->
+<!--    </button>-->
+<!--    <button class="col-6" mat-raised-button-->
+<!--            (click)="onChangeFontSizeClickListener('do')"-->
+<!--    >-->
+<!--      <mat-icon>text_rotation_down</mat-icon>-->
+<!--    </button>-->
+<!--  </mat-menu>-->
 
-  </button>
-  <!--  <button mat-icon-button class="example-icon" STYLE="padding-right: 70px"-->
-  <!--          (click)="singOut()">-->
-  <!--    <mat-icon>exit_to_app</mat-icon>-->
-  <!--    SALIR-->
-  <!--  </button>-->
+<!--  <button mat-icon-button class="example-icon" STYLE="padding-right: 10px"-->
+<!--          (click)="onChangeThemeClickListener()">-->
+<!--    <mat-icon>{{icon_theme}}</mat-icon>-->
+<!--  </button>-->
 
 
   <button
@@ -42,10 +56,14 @@
 <mat-drawer-container class="example-container" hasBackdrop="false">
   <mat-drawer #drawer
               position="end"
-              style="width: 100%!important;min-width: 40px"
+              style="
+              width: 100%!important;
+              margin-top: 45px;
+              min-width: 40px;
+              "
               mode="over">
-    <mat-selection-list #shoes [multiple]="false">
-      <mat-list-option *ngFor="let menu of MENU_LIST" [value]="menu"
+    <mat-selection-list [multiple]="false">
+      <mat-list-option *ngFor="let menu of MENU_LIST"
                        (click)="onOptionsMenuClickListener(menu)">
         <mat-icon
           mat-list-icon>{{menu.icon}}
@@ -58,3 +76,6 @@
   </mat-drawer>
 
 </mat-drawer-container>
+<br>
+<br>
+<br>

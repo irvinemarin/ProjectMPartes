@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Section} from '../../admin/actividades/index/index.component';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
 import {ToastrService} from 'ngx-toastr';
 import {AngularFireStorage} from '@angular/fire/storage';
@@ -10,6 +9,8 @@ import {MatSort} from '@angular/material/sort';
 import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-warning/alert-dialog-delete.component';
 import {MatDialog} from '@angular/material/dialog';
 import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
+import {getRouterModuleDeclaration} from '@schematics/angular/utility/ast-utils';
+import {ActivatedRoute, RouterModule} from '@angular/router';
 
 
 /** Constants used to fill up our data base. */
@@ -47,7 +48,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   constructor(private toastr: ToastrService,
               private apiFirebase: WebServiceAPIService,
               private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog
+              private dialog: MatDialog,
+              private route: ActivatedRoute,
   ) {
 
 
@@ -58,13 +60,13 @@ export class MainComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.getActividadesWS();
+    this.getEscritosWS();
 
   }
 
   ngAfterViewInit() {
-    this.dataTable.paginator = this.paginator;
-    this.dataTable.sort = this.sort;
+    // this.dataTable.paginator = this.paginator;
+    // this.dataTable.sort = this.sort;
   }
 
   applyFilter(event: Event) {
@@ -90,7 +92,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
 
-  getActividadesWS = () =>
+  getEscritosWS = () =>
     this.apiFirebase
       .getEscritosList()
       .subscribe(res => {
@@ -98,13 +100,35 @@ export class MainComponent implements OnInit, AfterViewInit {
           res.forEach(item => {
             item['rowNumber'] = rowNumber++;
             item['estadoValue'] = MainComponent.getEstado(item.lEstado, 'val');
+            // item['countDocuments'] = this.getSizeOfList(item.id, 'escritosDocumentos');
+            // item['countPresentantes'] = this.getSizeOfList(item.id, 'escritosPresentantes');
           });
 
+
           // this.dataTable = new MatTableDataSource(Array.from({length: 100}, (_, k) => this.createNewUser(k + 1)));
-          this.dataTable = new MatTableDataSource(Array.from({length: res.length}, ((item, k) => res[k])));
+          // this.dataTable = new MatTableDataSource(Array.from({length: res.length}, ((item, k) => res[k])));
+          this.dataTable = new MatTableDataSource(res);
 
         }
       );
+
+  getSizeOfList(id: any, refList: string): number {
+    let size = 0;
+    if (refList == 'escritosDocumentos') {
+      this.apiFirebase.getSizeEscritosDocumentos(id).subscribe(
+        resp => {
+          size = resp;
+        }
+      );
+    } else {
+      this.apiFirebase.getSizeParte(id).subscribe(
+        resp => {
+          size = resp;
+        }
+      );
+    }
+    return size;
+  }
 
   private static getEstado(estadoID: string, typeGet = 'col'): string {
     let value = '';
@@ -128,6 +152,8 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
 
+//asdkadf
+
   onClickEnviarDocumentoListener(row: any) {
     this.apiFirebase.editData(row.id, 'ESC', 'EN')
       .then(res => {
@@ -144,6 +170,8 @@ export class MainComponent implements OnInit, AfterViewInit {
 
 
   openDialogEdit(postition: number, itemEscrito: any, typeObject: string): void {
+
+
     const dialogo1 = this.dialog.open(DialogMultipleFull, {
       data: new DataModalMultiple(
         'EDITAR DOCUMENTOS ADJUNTOS', itemEscrito,)
@@ -153,5 +181,29 @@ export class MainComponent implements OnInit, AfterViewInit {
 
       }
     });
+  }
+
+  onClickImprimirDocumentoListener(row: any) {
+    // alert('Clickled');
+
+    // let dataRecurso = row.recurso.split(' ');
+    // let MotivoIngreso = dataRecurso[0];
+    // let Sala = dataRecurso[0];
+    // let Anio = dataRecurso[0];
+    let data = {
+      recurso: row.recurso,
+      sala: row.instancia,
+      fecha: row.fechaIngreso,
+      folios: row.n_fojas,
+      cantd: row.cantDoc,
+      documento: row.docPrincipalName,
+      prestante: row.presentante0,
+      cod_documento: `${row.id}_${new Date(row.fechaIngreso).getFullYear()}`,
+
+    };
+
+    localStorage.setItem('printFile', JSON.stringify(data));
+
+    window.open('/print', '_popupComponentRef');
   }
 }

@@ -1,0 +1,50 @@
+<div class="container"
+>
+  <br>
+  <br>
+  <mat-card
+    style="
+
+
+     ">
+
+    <mat-progress-bar mode="determinate"
+                      [value]="proggres.proggres"
+                      [class.hide]="proggres.hideProgress"
+    >
+
+    </mat-progress-bar>
+
+
+    <mat-card-header class="p-3">
+      <mat-card-title>
+        ACTUALIZAR DATOS
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="p-5">
+
+
+      <div>
+        <h4
+          [class.hide]="proggres.hideProgress"
+        >TABLAS ACTUALIZADAS </h4>
+        <p *ngFor="let item of proggres.tableInfoList">
+          {{item.tableName + " (" + item.countItem + ")" }}
+        </p>
+
+      </div>
+
+
+      <button mat-raised-button
+              (click)="onActualizarDatosClickListener()"
+      >REINTENTAR
+      </button>
+      <!--<P>Registro Expedientes actualizados : {{actualizados}}</P>-->
+    </mat-card-content>
+
+  </mat-card>
+
+
+</div>
+

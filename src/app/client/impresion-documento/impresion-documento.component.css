@@ -1,0 +1,48 @@
+.center, .center-align {
+  text-align: center;
+}
+
+body {
+  background-color: #FFF !important;
+}
+
+
+@media print {
+  app-root > * {
+    display: none;
+  }
+
+  app-root app-impresion-documento {
+    display: block;
+  }
+}
+
+.itemrow {
+  padding: 8px;
+}
+
+.img-logo {
+  position: absolute;
+  left: 40px;
+  height: 60px;
+  top: 40px;
+}
+
+.marca-agua {
+  position: absolute;
+  opacity: .2;
+  transform: rotate(-65deg);
+  margin: auto;
+  font-size: 100px !important;
+  top: 10cm;
+  left: 6cm;
+}
+
+.footer_custom {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  border-top-style: solid;
+  border-top-color: maroon;
+  border-top-width: 1px;
+}

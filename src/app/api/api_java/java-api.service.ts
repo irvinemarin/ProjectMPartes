@@ -26,4 +26,17 @@ export class JavaApiService {
 
     return this.http.get(`${this.localUrl}escritos/getcreatedata/${xformato}_${nExp}_${nAnioExp}_${xTipoMotivo}`, {headers});
   }
+
+  getAllDataExpdientes(username: string = 'all') {
+
+    let headers = this.headers;
+    let userid = localStorage.getItem('n_abogado');
+    return this.http.get(`${this.localUrl}escritos/getdataExpedientes/nn`, {headers});
+
+  }
+
+  getAllDataInicial() {
+    let headers = this.headers;
+    return this.http.get(`${this.localUrl}escritos/getcreatedata/nn_0_0_nn`, {headers});
+  }
 }

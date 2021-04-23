@@ -113,19 +113,19 @@ export class NavBarComponent implements OnInit, AfterViewInit {
 
     if (this.icon_theme == 'brightness_4') {
       this.icon_theme = 'brightness_5';
-      elementsBody[0].style.backgroundColor = '#666666';
+      elementsBody[0].style.backgroundColor = '#4f4f4f';
       for (let i = 0; i < cards.length; i++) {
         let element = <HTMLElement> cards[i];
-        element.style.backgroundColor = '#c5c5c5';
+        element.style.backgroundColor = '#dedede';
         element.style.color = '#FFF';
 
       }
     } else {
       this.icon_theme = 'brightness_4';
-      elementsBody[0].style.backgroundColor = '#FFF';
+      elementsBody[0].style.backgroundColor = '#f5dfdf';
       for (let i = 0; i < cards.length; i++) {
         let element = <HTMLElement> cards[i];
-        element.style.backgroundColor = '#FFF';
+        element.style.backgroundColor = '#ffffff';
         element.style.color = '#666666';
 
       }
@@ -154,5 +154,20 @@ export class NavBarComponent implements OnInit, AfterViewInit {
     } else {
       this.toastr.warning('Click : ' + menu.text);
     }
+  }
+
+  fontSize = 14;
+
+  onChangeFontSizeClickListener(optionSize: string) {
+
+    let cards = document.getElementsByTagName('body');
+    for (let i = 0; i < cards.length; i++) {
+      this.fontSize++;
+      let element = <HTMLElement> cards[i];
+      element.style.backgroundColor = '#c1c1c1';
+      element.style.fontSize = this.fontSize + '';
+    }
+
+
   }
 }

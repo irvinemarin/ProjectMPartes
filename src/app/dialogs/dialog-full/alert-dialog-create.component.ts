@@ -6,7 +6,6 @@ import {ToastrService} from 'ngx-toastr';
 import {FileData} from '../../client/registrar-documento/registrar-documento.component';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
 import {AlertDialogDelete, DataModal} from '../dialog-warning/alert-dialog-delete.component';
-import {toBase64String} from '@angular/compiler/src/output/source_map';
 
 export class DataModalMultiple {
   constructor(
@@ -84,10 +83,17 @@ export class DialogMultipleFull implements OnInit {
   }
 
   private getWSBuscarExpediente(anio: '', motivoIngreso: '') {
-    this.api.getDatosExpedienteEncontrado('', this.nroSala, anio, motivoIngreso).subscribe(
+    this.apiFirebase.getDatosExpedienteEncontrado('', this.nroSala, anio, motivoIngreso).subscribe(
       response => {
-        if (response['expediente'] != null) {
-          this.dialogRef.close(response);
+        if (response != null) {
+          let expedienteEncontrado = null;
+          response.forEach(item => {
+            if (item.n_exp_sala == this.nroSala && item.n_ano == anio && item.c_motivo_ingreso == motivoIngreso) {
+              expedienteEncontrado = item;
+            }
+          });
+
+          this.dialogRef.close(expedienteEncontrado);
         }
       },
       error => {
@@ -111,7 +117,7 @@ export class DialogMultipleFull implements OnInit {
     dialogo1.afterClosed().subscribe(result => {
       if (result == 'F_DEL') {
 
-        let desertRef = this.apiFirebase.referenciaCloudStorage(`${itemFile.name}`);
+        let desertRef = this.apiFirebase.referenciaCloudStorage(`${itemFile.nUnico}/${itemFile.name}`);
         let files = this.FILES_LIST;
 
         desertRef.delete().subscribe(function(response) {

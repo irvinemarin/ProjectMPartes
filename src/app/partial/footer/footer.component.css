@@ -1,4 +1,11 @@
 .footer-primary-color {
+  padding: 16px;
+  background-color: #585858 !important;
+  color: #c6c6c6;
+  flex: 1 auto;
+}
+
+mat-list-item {
   background-color: #585858 !important;
   color: #c6c6c6;
   flex: 1 auto;
