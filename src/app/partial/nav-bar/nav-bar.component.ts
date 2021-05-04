@@ -4,6 +4,8 @@ import {User, WSAuthService} from '../../api/ws-api_mpartes.service';
 import {ToastrService} from 'ngx-toastr';
 import {AlertDialogDelete, DataModal} from '../../dialogs/dialog-warning/alert-dialog-delete.component';
 import {MatDialog} from '@angular/material/dialog';
+import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
+import {MatDrawer} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-nav-bar',
@@ -122,7 +124,7 @@ export class NavBarComponent implements OnInit, AfterViewInit {
       }
     } else {
       this.icon_theme = 'brightness_4';
-      elementsBody[0].style.backgroundColor = '#f5dfdf';
+      elementsBody[0].style.backgroundColor = '#dedede';
       for (let i = 0; i < cards.length; i++) {
         let element = <HTMLElement> cards[i];
         element.style.backgroundColor = '#ffffff';
@@ -136,33 +138,58 @@ export class NavBarComponent implements OnInit, AfterViewInit {
 
   openDialogWarning(): void {
     const dialogo1 = this.dialog.open(AlertDialogDelete, {
+      disableClose: true,
       data: new DataModal(
         'NECESITA ACTUALIZAR UNOS DATOS ANTES DE CONTINUAR ', 'Ir a actualizar sus datos', 'DATA_EXTRA', null)
     });
     dialogo1.afterClosed().subscribe(result => {
-      if (result == 'Deleted') {
-        // this.actividadListIndex.splice(this.actividadListIndex
-        //   .findIndex(x => x.id === folder.id), 1);
-
+      if (result == 'ACT') {
+        this.showDialogINFO();
       }
     });
   }
 
-  onOptionsMenuClickListener(menu) {
-    if (menu.text == 'Salir') {
-      this.singOut();
-    } else {
-      this.toastr.warning('Click : ' + menu.text);
+  onOptionsMenuClickListener(menu, drawer: MatDrawer) {
+
+
+    switch (menu.text) {
+      case 'Salir':
+        this.singOut();
+        break;
+      case 'Configuración':
+
+        this.showDialogINFO();
+
+
+        break;
+
     }
+    drawer.toggle().then(r => {
+      this.toastr.success(r);
+    });
+
+  }
+
+  private showDialogINFO() {
+    const dialogo1 = this.dialog.open(DialogMultipleFull, {
+      disableClose: true,
+      data: new DataModalMultiple(
+        'MI INFORMACION', null)
+    });
+    dialogo1.afterClosed().subscribe(result => {
+      if (result == 'INF-UPDATE') {
+      }
+
+    });
   }
 
   fontSize = 14;
 
   onChangeFontSizeClickListener(optionSize: string) {
-
+    this.fontSize++;
     let cards = document.getElementsByTagName('body');
     for (let i = 0; i < cards.length; i++) {
-      this.fontSize++;
+
       let element = <HTMLElement> cards[i];
       element.style.backgroundColor = '#c1c1c1';
       element.style.fontSize = this.fontSize + '';

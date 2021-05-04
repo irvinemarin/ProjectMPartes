@@ -287,5 +287,102 @@
 
   </div>
 
+
+  <!--FORM EDITAR INFORMACION-->
+  <div class="" style="min-width: 500px;" *ngIf="data.title=='MI INFORMACION'">
+    <button
+      [mat-dialog-close]="true"
+      mat-button color="warn" class=""
+      style="float: right">
+      <mat-icon>
+        close
+      </mat-icon>
+    </button>
+
+
+    <mat-progress-bar
+      [class.hide]="isHideProggres"
+      mode="indeterminate"></mat-progress-bar>
+
+    <h2 class="center">{{data.title}}
+      <button mat-raised-button color="primary" class=""
+              *ngIf="!modoEditInfo"
+              (click)="onClickModeEditClickListener()">MODIFICAR INFORMACION
+      </button>
+      <button
+        *ngIf="modoEditInfo"
+        mat-raised-button color="warn" class=""
+        (click)="onClickModeEditCancelClickListener()">CANCELAR
+      </button>
+      <button
+        *ngIf="modoEditInfo"
+        style="margin-left: 5px"
+        mat-raised-button color="primary" class=""
+        (click)="onClickModeEditSaveClickListener()">GUARDAR CAMBIOS
+      </button>
+    </h2>
+    <div class="row p-5">
+      <div class="col-sm-2 col-lg-2">
+
+        <img [src]="imgProfile"
+             style=" border-radius: 50%;
+                   width: auto;
+                   height: 100px;
+                ">
+        <label>
+          {{correo}}
+        </label>
+      </div>
+      <div class="col-lg-10">
+
+        <div class="row">
+          <div class="col-sm-12 col-lg-4" *ngFor="let itemColum of DATA_USER_FORM;let row=index">
+
+
+            <mat-form-field
+              *ngIf="!itemColum.isSelect && itemColum.columName!='photoURL'"
+              style="width: 100%">
+              <mat-label>{{itemColum.labelText}}</mat-label>
+              <input
+                [disabled]="!modoEditInfo"
+                autocomplete="off"
+                [type]="itemColum.isDate?'date':'text'"
+                matInput placeholder="" [(ngModel)]="itemColum.value">
+            </mat-form-field>
+
+
+            <mat-form-field
+              *ngIf="itemColum.isSelect"
+              style="width: 100%">
+              <mat-label>{{itemColum.labelText}}</mat-label>
+              <mat-select
+                #SEL_
+                [(ngModel)]="itemColum.value"
+                [disabled]="!modoEditInfo"
+              >
+                <mat-option *ngFor="let selectItem of itemColum.valueSelect"
+                            [value]="selectItem.value"
+
+                            (click)="onSelectItemChangeListener(itemColum,selectItem.value)"
+                >
+                  {{selectItem.viewValue}}
+                </mat-option>
+
+              </mat-select>
+            </mat-form-field>
+
+
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
 </div>
 

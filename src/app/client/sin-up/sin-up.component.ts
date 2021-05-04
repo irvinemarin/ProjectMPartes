@@ -7,6 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {DataModalMultiple, DialogMultipleFull} from '../../dialogs/dialog-full/alert-dialog-create.component';
 import {FormItem} from './form.item';
 import {INPUTS_IDS} from './INPUTS_IDS';
+import {TEXT_RESOURCE} from '../../utils/text-resource.enum';
 
 @Component({
   selector: 'app-sin-up',
@@ -137,10 +138,19 @@ export class SinUpComponent implements OnInit {
       colegioAbogado: this.getValueOfForm(this.formsList, INPUTS_IDS.COLEGIO_ABOGADO),
       nroColegioAbo: this.getValueOfForm(this.formsList, INPUTS_IDS.NRO_COLEGIO_ABOG),
       sinoe: this.getValueOfForm(this.formsList, INPUTS_IDS.SINOE),
+      tipoPersona: this.getValueOfForm(this.formsList, INPUTS_IDS.TIPO_PERSONA),
 
     };
-    this.apiAuth.SetUserData(userData).then()
-      .catch();
+    this.apiAuth.SetUserData(userData).then(
+      response => {
+        this.router.navigate(['/main']);
+      }
+    )
+      .catch(
+        error => {
+          this.toastr.error(error.getMessage());
+        }
+      );
   }
 
   private clearValuesInputs() {
@@ -170,7 +180,7 @@ export class SinUpComponent implements OnInit {
   private validateInputs(valueText: string, inputName: string) {
     if (valueText == '') {
       this.errorForms++;
-      this.toastr.warning(`Ingrese texto para ${inputName}`, 'COMPLETAR DATOS');
+      this.toastr.warning(`${TEXT_RESOURCE.SINGUP_VALIDAR_INPUTS_ALERT_MESSAGE} ${inputName}`, TEXT_RESOURCE.SINGUP_VALIDAR_INPUTS_ALERT_TITULO);
     }
 
   }
@@ -186,9 +196,10 @@ export class SinUpComponent implements OnInit {
         .then((result) => {
           console.table(result);
 
-          this.router.navigate(['/main']);
 
           this.SetUserData(result.user);
+
+
         }).catch((error) => {
 
         // window.alert(error);

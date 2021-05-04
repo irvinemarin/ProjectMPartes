@@ -6,6 +6,7 @@ import {ToastrService} from 'ngx-toastr';
 import {FileData} from '../../client/registrar-documento/registrar-documento.component';
 import {WebServiceAPIService} from '../../api/web-service-api.service';
 import {AlertDialogDelete, DataModal} from '../dialog-warning/alert-dialog-delete.component';
+import {UtilArrays} from '../../utils/util-arrays';
 
 export class DataModalMultiple {
   constructor(
@@ -30,6 +31,9 @@ export class DialogMultipleFull implements OnInit {
   SEL_MOTIVOINGRESO = [];
   nroSala = '';
   FILES_LIST: Array<any>;
+  DATA_USER_FORM = [];
+  DATA_USER_DB = [];
+  tipoPersona = '';
 
 
   constructor(
@@ -44,6 +48,16 @@ export class DialogMultipleFull implements OnInit {
 
   }
 
+  modoEditInfo = false;
+  UserLogged;
+  idUserDB;
+  isHideProggres = true;
+// value
+  tipoDocSelected = '';
+  ColegioAbogadoSelected = '';
+  imgProfile = '';
+  correo = '';
+
   ngOnInit(): void {
 
     if (this.data.title == 'EDITAR DOCUMENTOS ADJUNTOS') {
@@ -53,7 +67,33 @@ export class DialogMultipleFull implements OnInit {
       }, (error) => {
         this.toastr.error('No se pudo Obtener algunos datos ACTUALIZE la pagina', '');
       });
+
     }
+
+    if (this.data.title == 'MI INFORMACION') {
+      this.UserLogged = JSON.parse(localStorage.getItem('user'));
+      this.apiFirebase.getDataUser(this.UserLogged.uid).subscribe((res: any[]) => {
+        this.DATA_USER_DB = [];
+        this.DATA_USER_FORM = [];
+        if (res[0] != null) {
+          let userDbInfo = res[0];
+          this.idUserDB = userDbInfo.id;
+          this.tipoDocSelected = userDbInfo.tipoDoc;
+          this.imgProfile = userDbInfo.photoURL;
+          this.correo = userDbInfo.email;
+          this.tipoPersona = userDbInfo.tipoPersona;
+          this.ColegioAbogadoSelected = userDbInfo.colegioAbogado;
+          this.DATA_USER_FORM = UtilArrays.getPopulateFormsList(userDbInfo);
+          this.DATA_USER_DB = UtilArrays.getPopulateFormsList(userDbInfo);
+
+        }
+
+
+      }, (error) => {
+        this.toastr.error('No se pudo Obtener algunos datos ACTUALIZE la pagina', '');
+      });
+    }
+
 
   }
 
@@ -86,14 +126,7 @@ export class DialogMultipleFull implements OnInit {
     this.apiFirebase.getDatosExpedienteEncontrado('', this.nroSala, anio, motivoIngreso).subscribe(
       response => {
         if (response != null) {
-          let expedienteEncontrado = null;
-          response.forEach(item => {
-            if (item.n_exp_sala == this.nroSala && item.n_ano == anio && item.c_motivo_ingreso == motivoIngreso) {
-              expedienteEncontrado = item;
-            }
-          });
-
-          this.dialogRef.close(expedienteEncontrado);
+          this.dialogRef.close(response);
         }
       },
       error => {
@@ -159,7 +192,6 @@ export class DialogMultipleFull implements OnInit {
 
     this.FILES_LIST.forEach(itemFor => {
 
-      console.log('idDocumento : ' + itemFor['id']);
 
       this.apiFirebase.editData(itemFor['id'], 'ESC_DOC', itemFor.isDocPrincipal)
         .then(response => {
@@ -173,6 +205,60 @@ export class DialogMultipleFull implements OnInit {
     });
 
 
+  }
+
+  onClickModeEditClickListener() {
+    if (this.modoEditInfo) {
+      this.modoEditInfo = false;
+    } else {
+      this.modoEditInfo = true;
+    }
+  }
+
+  onClickModeEditCancelClickListener() {
+    this.modoEditInfo = false;
+  }
+
+  onClickModeEditSaveClickListener() {
+
+
+    this.isHideProggres = false;
+    let count = 0;
+    this.DATA_USER_FORM.forEach(item => {
+      let value = item.value;
+      let value2 = this.DATA_USER_DB[count].value;
+      if (item.isSelect) {
+        value = item.selected;
+        value2 = this.DATA_USER_DB[count].selected;
+      }
+
+
+      if (value != value2) {
+
+
+        this.apiFirebase.editDataUser(this.idUserDB, item.columName, value)
+          .then(response => {
+            this.toastr.success('Cambios Guardados ' + item.labelText);
+          })
+          .catch(
+            error => {
+              this.toastr.error('Cambios NO GUARDADOS');
+            }
+          );
+      }
+      count++;
+    });
+
+    if (count == this.DATA_USER_FORM.length) {
+      this.isHideProggres = true;
+    }
+
+    this.modoEditInfo = false;
+
+  }
+
+  onSelectItemChangeListener(itemColum, value: any) {
+    itemColum.selected = value;
   }
 }
 

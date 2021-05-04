@@ -32,10 +32,10 @@
 <!--    </button>-->
 <!--  </mat-menu>-->
 
-<!--  <button mat-icon-button class="example-icon" STYLE="padding-right: 10px"-->
-<!--          (click)="onChangeThemeClickListener()">-->
-<!--    <mat-icon>{{icon_theme}}</mat-icon>-->
-<!--  </button>-->
+  <button mat-icon-button class="example-icon" STYLE="padding-right: 10px"
+          (click)="onChangeThemeClickListener()">
+    <mat-icon>{{icon_theme}}</mat-icon>
+  </button>
 
 
   <button
@@ -64,7 +64,7 @@
               mode="over">
     <mat-selection-list [multiple]="false">
       <mat-list-option *ngFor="let menu of MENU_LIST"
-                       (click)="onOptionsMenuClickListener(menu)">
+                       (click)="onOptionsMenuClickListener(menu,drawer)">
         <mat-icon
           mat-list-icon>{{menu.icon}}
         </mat-icon>

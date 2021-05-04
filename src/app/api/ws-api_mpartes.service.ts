@@ -24,6 +24,7 @@ export interface User {
   colegioAbogado: string;
   nroColegioAbo: string;
   sinoe: string;
+  tipoPersona: string;
 
 
 }

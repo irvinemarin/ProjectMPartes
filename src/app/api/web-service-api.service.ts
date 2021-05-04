@@ -23,6 +23,9 @@ export class WebServiceAPIService {
   }
 
 
+
+
+
   createPersonData(data) {
     return this.firestore
       .collection('persons')
@@ -103,6 +106,18 @@ export class WebServiceAPIService {
   }
 
 
+
+  getSliders() {
+    return this.firestore.collection<any>('slider').snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return {id, ...data};
+        });
+      }));
+  }
+
   deleteItem(object: string, idItem: string, dialog: MatDialogRef<AlertDialogDelete>) {
 
     let ref = '';
@@ -152,6 +167,7 @@ export class WebServiceAPIService {
         });
       }));
   }
+
 
   getDataContacto() {
     return this.firestore.collection<any>('contacto').snapshotChanges().pipe(
@@ -362,13 +378,14 @@ export class WebServiceAPIService {
       );
   }
 
-  getDatosExpedienteEncontrado(s, nroSala, anio, motivoIngreso) {
-    console.log(nroSala + ' ' + anio + ' ' + motivoIngreso);
+  getDatosExpedienteEncontrado(s: string, nroSala: string, anio: '', motivoIngreso: '') {
 
     return this.firestore
       .collection<any>('registroExpedientes',
-        ref =>
-          ref.where('c_motivo_ingreso', '==', motivoIngreso)
+        ref => ref
+          .where('n_exp_sala', '==', nroSala)
+          .where('n_ano', '==', anio)
+          .where('x_desc_motivo_ingreso', '==', motivoIngreso)
       ).snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -378,6 +395,31 @@ export class WebServiceAPIService {
           });
         })
       );
+  }
+
+  getDataUser(idUser: any) {
+    return this.firestore
+      .collection<any>('users', ref => ref
+        .where('idAut', '==', idUser)
+      ).snapshotChanges().pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return {id, ...data};
+          });
+        })
+      );
+
+  }
+
+  editDataUser(uid: any, columnName: string, valueToChange) {
+    let db = firebase.firestore();
+    let itemString = ` { "${columnName}" : "${valueToChange}" } `;
+    let itemJSON = JSON.parse(itemString);
+    return db.collection('users').doc(uid).update(
+      itemJSON
+    );
   }
 }
 

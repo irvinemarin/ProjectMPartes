@@ -13,5 +13,4 @@ export enum INPUTS_IDS {
     TIPO_PERSONA = 'tipoPersona',
     NRO_COLEGIO_ABOG = 'nroColeg',
     SINOE = 'casSinoe',
-
 }
